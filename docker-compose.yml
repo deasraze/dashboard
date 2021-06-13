@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  nginx:
+    build:
+      context: ./dashboard/docker/development
+      dockerfile: nginx/nginx.docker
+    volumes:
+      - ./dashboard:/app:ro
+    depends_on:
+      - php-fpm
+    ports:
+      - "8080:80"
+
+  php-fpm:
+    build:
+      context: ./dashboard/docker/development
+      dockerfile: php/php-fpm.docker
+      args:
+        - USER_ID
+        - GROUP_ID
+    volumes:
+      - ./dashboard:/app
+
+  php-cli:
+    build:
+      context: ./dashboard/docker/development
+      dockerfile: php/php-cli.docker
+      args:
+        - USER_ID
+        - GROUP_ID
+    volumes:
+      - ./dashboard:/app
