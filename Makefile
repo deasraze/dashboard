@@ -2,6 +2,7 @@ up: docker-up
 down: docker-down
 restart: docker-down docker-up
 init: docker-down-clear docker-pull docker-build docker-up docker-init
+test: dashboard-test
 
 docker-up:
 	docker-compose up -d
@@ -22,6 +23,9 @@ docker-init: composer-install
 
 composer-install:
 	docker-compose run --rm php-cli composer install
+
+dashboard-test:
+	docker-compose run --rm php-cli php bin/phpunit
 
 build-production:
 	docker build --pull -f dashboard/docker/production/nginx/nginx.docker -t ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG} dashboard
