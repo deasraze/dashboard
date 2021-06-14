@@ -1,0 +1,9 @@
+FROM php:7.4.16-fpm
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+WORKDIR /app
+
+COPY ./ ./
+
+RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader

@@ -1,0 +1,10 @@
+FROM php:7.4.16-fpm
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+ARG USER_ID
+ARG GROUP_ID
+
+WORKDIR /app
+
+USER "${USER_ID}:${GROUP_ID}"
