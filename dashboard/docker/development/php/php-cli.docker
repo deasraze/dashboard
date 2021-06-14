@@ -5,6 +5,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ARG USER_ID
 ARG GROUP_ID
 
+RUN apt-get update && apt-get install -y libzip-dev \
+    && docker-php-ext-install zip \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 USER "${USER_ID}:${GROUP_ID}"
