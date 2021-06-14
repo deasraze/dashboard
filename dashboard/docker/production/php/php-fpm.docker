@@ -4,6 +4,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 WORKDIR /app
 
-COPY ./ ./
+COPY ./composer.json ./composer.lock ./
 
 RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader
+
+COPY ./ ./
