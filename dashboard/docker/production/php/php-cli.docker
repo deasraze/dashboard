@@ -2,6 +2,10 @@ FROM php:7.4.16-fpm
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
+RUN docker-php-ext-install opcache
+
+COPY ./docker/production/php/conf/default.ini /usr/local/etc/php/conf.d/default.ini
+
 WORKDIR /app
 
 COPY ./composer.json ./composer.lock ./
