@@ -14,7 +14,7 @@ services:
     restart: always
     environment:
       APP_SECRET: ${DASHBOARD_APP_SECRET}
-      DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres/dashboard?serverVersion=13&charset=utf8
+      DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
       MAILER_DSN: smtp://localhost
 
 
@@ -23,5 +23,5 @@ services:
     restart: always
     environment:
       APP_SECRET: ${APP_SECRET}
-      DATABASE_URL: postgresql://dashboard:${DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
+      DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
       MAILER_DSN: smtp://localhost
