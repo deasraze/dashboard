@@ -31,11 +31,13 @@ build-production:
 	docker build --pull -f dashboard/docker/production/nginx/nginx.docker -t ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/php/php-fpm.docker -t ${REGISTRY_ADDRESS}/php-fpm:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/php/php-cli.docker -t ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG} dashboard
+	docker build --pull -f dashboard/docker/production/postgres/postgres.docker -t ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG} dashboard
 
 push-production:
-	docker push ${REGISTRY_ADDRESS}/manager-nginx:${IMAGE_TAG}
-	docker push ${REGISTRY_ADDRESS}/manager-php-fpm:${IMAGE_TAG}
-	docker push ${REGISTRY_ADDRESS}/manager-php-cli:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/php-fpm:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG}
 
 deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'rm -rf docker-compose.yml .env'
