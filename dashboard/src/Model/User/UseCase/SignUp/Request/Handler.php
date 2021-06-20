@@ -45,8 +45,8 @@ class Handler
             Id::next(),
             new \DateTimeImmutable(),
             $email,
-            $token = $this->hasher->hashing($command->password),
-            $this->tokenizer->generate()
+            $this->hasher->hashing($command->password),
+            $token = $this->tokenizer->generate()
         );
 
         $this->users->add($user);
