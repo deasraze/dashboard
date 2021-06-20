@@ -11,7 +11,7 @@ class User
     private \DateTimeImmutable $date;
     private Email $email;
     private string $hash;
-    private string $confirmToken;
+    private ?string $confirmToken;
     private string $status;
 
     public function __construct(Id $id, \DateTimeImmutable $date, Email $email, string $hash, string $token)
@@ -22,6 +22,16 @@ class User
         $this->hash = $hash;
         $this->confirmToken = $token;
         $this->status = self::STATUS_WAIT;
+    }
+
+    public function confirmSignUp(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('User is already confirmed.');
+        }
+
+        $this->status = self::STATUS_ACTIVE;
+        $this->confirmToken = null;
     }
 
     public function isActive(): bool
@@ -54,7 +64,7 @@ class User
         return $this->hash;
     }
 
-    public function getConfirmToken(): string
+    public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
     }
