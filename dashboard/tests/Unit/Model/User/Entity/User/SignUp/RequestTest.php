@@ -12,11 +12,13 @@ class RequestTest extends TestCase
     {
         $user = new User(
             $id = Uuid::uuid4()->toString(),
+            $date = new \DateTimeImmutable(),
             $email = 'test@test.ds',
             $hash = 'hash'
         );
 
         self::assertEquals($id, $user->getId());
+        self::assertEquals($date, $user->getDate());
         self::assertEquals($email, $user->getEmail());
         self::assertEquals($hash, $user->getPasswordHash());
     }

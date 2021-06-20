@@ -25,6 +25,7 @@ class Handler
 
         $user = new User(
             Uuid::uuid4()->toString(),
+            new \DateTimeImmutable(),
             $email,
             \password_hash($command->password, PASSWORD_DEFAULT)
         );
