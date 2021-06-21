@@ -30,7 +30,7 @@ class RequestTest extends TestCase
         $user = $this->buildSignedUpUserByEmail();
         $user->requestPasswordReset($token, $now);
 
-        self::expectExceptionMessage('Resetting is already requested.');
+        $this->expectExceptionMessage('Resetting is already requested.');
         $user->requestPasswordReset($token, $now);
     }
 
@@ -57,7 +57,7 @@ class RequestTest extends TestCase
 
         $user = $this->buildUser();
 
-        self::expectExceptionMessage('Email is not specified.');
+        $this->expectExceptionMessage('Email is not specified.');
         $user->requestPasswordReset($token, $now);
     }
 

@@ -33,7 +33,7 @@ class AuthTest extends TestCase
             $identity = '111111'
         );
 
-        self::expectExceptionMessage('User is already signed up.');
+        $this->expectExceptionMessage('User is already signed up.');
 
         $user->signUpByNetwork($network, $identity);
     }
