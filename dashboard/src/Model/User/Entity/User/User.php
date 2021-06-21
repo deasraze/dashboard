@@ -15,6 +15,7 @@ class User
     private ?Email $email;
     private ?string $passwordHash;
     private ?string $confirmToken;
+    private ?ResetToken $resetToken;
     private string $status;
     /**
      * @var Network[]|ArrayCollection
@@ -61,6 +62,19 @@ class User
         $this->confirmToken = null;
     }
 
+    public function requestPasswordReset(ResetToken $resetToken, \DateTimeImmutable $date): void
+    {
+        if (null === $this->email) {
+            throw new \DomainException('Email is not specified.');
+        }
+
+        if (null !== $this->resetToken && !$this->resetToken->isExpiredTo($date)) {
+            throw new \DomainException('Resetting is already requested.');
+        }
+
+        $this->resetToken = $resetToken;
+    }
+
     public function isNew(): bool
     {
         return  ($this->status === self::STATUS_NEW);
@@ -99,6 +113,11 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
+    }
+
+    public function getResetToken(): ?ResetToken
+    {
+        return $this->resetToken;
     }
 
     /**
