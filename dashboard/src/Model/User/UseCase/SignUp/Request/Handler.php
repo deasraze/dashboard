@@ -41,9 +41,8 @@ class Handler
             throw new \DomainException('User with this email is already registered.');
         }
 
-        $user = new User(
-            Id::next(),
-            new \DateTimeImmutable(),
+        $user = new User(Id::next(), new \DateTimeImmutable());
+        $user->signUpByEmail(
             $email,
             $this->hasher->hashing($command->password),
             $token = $this->tokenizer->generate()
