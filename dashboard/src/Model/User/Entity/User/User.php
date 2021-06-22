@@ -12,10 +12,10 @@ class User
 
     private Id $id;
     private \DateTimeImmutable $date;
-    private ?Email $email;
+    private ?Email $email = null;
     private ?string $passwordHash;
     private ?string $confirmToken;
-    private ?ResetToken $resetToken;
+    private ?ResetToken $resetToken = null;
     private string $status;
     /**
      * @var Network[]|ArrayCollection
@@ -73,6 +73,20 @@ class User
         }
 
         $this->resetToken = $resetToken;
+    }
+
+    public function passwordReset(\DateTimeImmutable $date, string $hash): void
+    {
+        if (null === $this->resetToken) {
+            throw new \DomainException('Resetting is not requested.');
+        }
+
+        if ($this->resetToken->isExpiredTo($date)) {
+            throw new \DomainException('Reset token is expired.');
+        }
+
+        $this->passwordHash = $hash;
+        $this->resetToken = null;
     }
 
     public function isNew(): bool
