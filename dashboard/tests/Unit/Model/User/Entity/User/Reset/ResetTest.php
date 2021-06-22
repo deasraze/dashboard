@@ -13,7 +13,7 @@ class ResetTest extends TestCase
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = (new UserBuilder())->viaEmail()->build();
+        $user = (new UserBuilder())->viaEmail()->confirmed()->build();
         $user->requestPasswordReset($token, $now);
 
         self::assertNotNull($user->getResetToken());
@@ -29,7 +29,7 @@ class ResetTest extends TestCase
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now);
 
-        $user = (new UserBuilder())->viaEmail()->build();
+        $user = (new UserBuilder())->viaEmail()->confirmed()->build();
         $user->requestPasswordReset($token, $now);
 
         $this->expectExceptionMessage('Reset token is expired.');

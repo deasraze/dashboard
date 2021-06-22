@@ -8,15 +8,16 @@ use App\Model\User\Entity\User\User;
 
 class UserBuilder
 {
-    private Id $id;
-    private \DateTimeImmutable $date;
+    private $id;
+    private $date;
 
-    private ?Email $email = null;
-    private ?string $hash;
-    private ?string $token;
+    private $email;
+    private $hash;
+    private $token;
+    private $confirmed;
 
-    private ?string $network = null;
-    private string $identity;
+    private $network;
+    private $identity;
 
     public function __construct()
     {
@@ -43,6 +44,14 @@ class UserBuilder
         return $clone;
     }
 
+    public function confirmed(): self
+    {
+        $clone = clone $this;
+        $clone->confirmed = true;
+
+        return $clone;
+    }
+
     public function build(): User
     {
         $user = new User(
@@ -56,6 +65,10 @@ class UserBuilder
                 $this->hash,
                 $this->token
             );
+
+            if ($this->confirmed) {
+                $user->confirmSignUp();
+            }
         }
 
         if (null !== $this->network) {

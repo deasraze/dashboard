@@ -13,7 +13,7 @@ class RequestTest extends TestCase
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = (new UserBuilder())->viaEmail()->build();
+        $user = (new UserBuilder())->viaEmail()->confirmed()->build();
         $user->requestPasswordReset($token, $now);
 
         self::assertNotNull($user->getResetToken());
@@ -25,7 +25,7 @@ class RequestTest extends TestCase
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = (new UserBuilder())->viaEmail()->build();
+        $user = (new UserBuilder())->viaEmail()->confirmed()->build();
         $user->requestPasswordReset($token, $now);
 
         $this->expectExceptionMessage('Resetting is already requested.');
@@ -37,7 +37,7 @@ class RequestTest extends TestCase
         $now = new \DateTimeImmutable();
         $tokenOne = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = (new UserBuilder())->viaEmail()->build();
+        $user = (new UserBuilder())->viaEmail()->confirmed()->build();
         $user->requestPasswordReset($tokenOne, $now);
 
         self::assertEquals($tokenOne, $user->getResetToken());
@@ -48,12 +48,23 @@ class RequestTest extends TestCase
         self::assertEquals($tokenTwo, $user->getResetToken());
     }
 
+    public function testNotConfirmed()
+    {
+        $now = new \DateTimeImmutable();
+        $token = new ResetToken('token', $now->modify('+1 day'));
+
+        $user = (new UserBuilder())->viaEmail()->build();
+
+        $this->expectExceptionMessage('User is not active.');
+        $user->requestPasswordReset($token, $now);
+    }
+
     public function testWithoutEmail(): void
     {
         $now = new \DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
 
-        $user = (new UserBuilder())->build();
+        $user = (new UserBuilder())->viaNetwork()->build();
 
         $this->expectExceptionMessage('Email is not specified.');
         $user->requestPasswordReset($token, $now);
