@@ -38,7 +38,7 @@ class ResetToken
      */
     public function isEmpty(): bool
     {
-        return \empty($this->token);
+        return empty($this->token);
     }
 
     public function getToken(): string
