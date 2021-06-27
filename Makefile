@@ -19,10 +19,16 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-docker-init: composer-install
+dashboard-init: dashboard-composer-install dashboard-wait-db dashboard-migrations
 
-composer-install:
+dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
+
+dashboard-wait-db:
+	until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done
+
+dashboard-migrations:
+	docker-compose run --rm php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
@@ -48,3 +54,5 @@ deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "DASHBOARD_DB_PASSWORD=${DASHBOARD_DB_PASSWORD}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose pull'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose up --build -d'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose run --rm php-cli php bin/console doctrine:migrations:migrate --no-interaction'
