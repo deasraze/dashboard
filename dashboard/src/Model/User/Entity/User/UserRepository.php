@@ -54,8 +54,8 @@ class UserRepository
                 ->select('COUNT(t.id)')
                 ->innerJoin('t.networks', 'n')
                 ->andWhere('n.network = :network and n.identity = :identity')
-                ->setParameter('network', $network)
-                ->setParameter('identity', $identity)
+                ->setParameter(':network', $network)
+                ->setParameter(':identity', $identity)
                 ->getQuery()->getSingleScalarResult() > 0;
     }
 
