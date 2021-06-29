@@ -48,7 +48,7 @@ class User
      */
     private string $status;
     /**
-     * @ORM\Column(type="user_user_role")
+     * @ORM\Column(type="user_user_role", length=16)
      */
     private Role $role;
     /**
