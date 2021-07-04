@@ -2,9 +2,7 @@
 
 namespace App\Controller\Auth;
 
-use App\Model\User\UseCase\SignUp\Request\Command;
-use App\Model\User\UseCase\SignUp\Request\Form;
-use App\Model\User\UseCase\SignUp\Request\Handler;
+use App\Model\User\UseCase\SignUp;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +21,12 @@ class SignUpController extends AbstractController
     /**
      * @Route("/signup", name="auth.signup")
      * @param Request $request
-     * @param Handler $handler
+     * @param SignUp\Request\Handler $handler
      * @return Response
      */
-    public function request(Request $request, Handler $handler): Response
+    public function request(Request $request, SignUp\Request\Handler $handler): Response
     {
-        $command = new Command();
+        $command = new SignUp\Request\Command();
 
         $form = $this->createForm(Form::class, $command);
         $form->handleRequest($request);
@@ -48,5 +46,26 @@ class SignUpController extends AbstractController
         return $this->render('app/auth/signup.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/signup/{token}", name="auth.signup.confirm")
+     * @param string $token
+     * @param SignUp\Confirm\Handler $handler
+     * @return Response
+     */
+    public function confirm(string $token, SignUp\Confirm\Handler $handler): Response
+    {
+        $command = new SignUp\Confirm\Command($token);
+
+        try {
+            $handler->handle($command);
+            $this->addFlash('success', 'Email is successfully confirmed.');
+        } catch (\DomainException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectToRoute('home');
     }
 }
