@@ -8,14 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SignUpController extends AbstractController
 {
     private LoggerInterface $logger;
+    private TranslatorInterface $translator;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, TranslatorInterface $translator)
     {
         $this->logger = $logger;
+        $this->translator = $translator;
     }
 
     /**
@@ -39,7 +42,7 @@ class SignUpController extends AbstractController
                 return $this->redirectToRoute('home');
             } catch (\DomainException $e) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
-                $this->addFlash('error', $e->getMessage());
+                $this->addFlash('error', $this->translator->trans($e->getMessage(), [], 'exceptions'));
             }
         }
 
@@ -63,7 +66,7 @@ class SignUpController extends AbstractController
             $this->addFlash('success', 'Email is successfully confirmed.');
         } catch (\DomainException $e) {
             $this->logger->error($e->getMessage(), ['exception' => $e]);
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('error', $this->translator->trans($e->getMessage(), [], 'exceptions'));
         }
 
         return $this->redirectToRoute('home');
