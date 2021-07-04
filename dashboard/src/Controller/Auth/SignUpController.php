@@ -28,7 +28,7 @@ class SignUpController extends AbstractController
     {
         $command = new SignUp\Request\Command();
 
-        $form = $this->createForm(Form::class, $command);
+        $form = $this->createForm(SignUp\Request\Form::class, $command);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
