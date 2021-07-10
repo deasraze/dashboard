@@ -3,6 +3,7 @@
 namespace App\Controller\Auth;
 
 use App\Model\User\UseCase\Reset;
+use App\ReadModel\User\UserFetcher;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,8 +49,14 @@ class ResetController extends AbstractController
     /**
      * @Route("/reset/{token}", name="auth.reset.reset")
      */
-    public function reset(string $token, Request $request, Reset\Reset\Handler $handler): Response
+    public function reset(string $token, Request $request, Reset\Reset\Handler $handler, UserFetcher $users): Response
     {
+        if (!$users->existsByResetToken($token)) {
+            $this->addFlash('error', 'Incorrect or already confirmed token.');
+
+            return $this->redirectToRoute('home');
+        }
+
         $command = new Reset\Reset\Command($token);
 
         $form = $this->createForm(Reset\Reset\Form::class, $command);
