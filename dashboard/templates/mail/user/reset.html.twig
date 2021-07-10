@@ -1,0 +1,11 @@
+{% extends 'mail.html.twig' %}
+
+{% block body %}
+
+    <p>Follow this link to reset your password:</p>
+
+    {% set url = url('auth.reset.reset', {'token': token}) %}
+
+    <p><a href="{{ url }}">{{ url }}</a></p>
+
+{% endblock %}
