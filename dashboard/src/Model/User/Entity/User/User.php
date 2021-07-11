@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user_users", uniqueConstraints={
  *     @ORM\UniqueConstraint(columns={"email"}),
  *     @ORM\UniqueConstraint(columns={"reset_token_token"})
