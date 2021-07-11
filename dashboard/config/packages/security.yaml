@@ -13,6 +13,7 @@ security:
             lazy: true
             provider: fetcher
             custom_authenticator: App\Security\LoginFormAuthenticator
+            user_checker: App\Security\UserChecker
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
