@@ -19,7 +19,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-dashboard-init: dashboard-composer-install dashboard-wait-db dashboard-migrations
+dashboard-init: dashboard-composer-install dashboard-wait-db dashboard-migrations dashboard-fixtures
 
 dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
@@ -29,6 +29,9 @@ dashboard-wait-db:
 
 dashboard-migrations:
 	docker-compose run --rm php-cli php bin/console doctrine:migrations:migrate --no-interaction
+
+dashboard-fixtures:
+	docker-compose run --rm php-cli php bin/console doctrine:fixtures:load --no-interaction
 
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
