@@ -16,6 +16,11 @@ security:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_login
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
