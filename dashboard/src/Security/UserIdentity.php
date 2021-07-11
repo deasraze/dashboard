@@ -2,9 +2,10 @@
 
 namespace App\Security;
 
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserIdentity implements UserInterface
+class UserIdentity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private string $id;
     private string $username;
