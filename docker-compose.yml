@@ -23,6 +23,7 @@ services:
       - ./dashboard:/app
     depends_on:
       - postgres
+      - mailer
 
   php-cli:
     build:
@@ -35,6 +36,7 @@ services:
       - ./dashboard:/app
     depends_on:
       - postgres
+      - mailer
 
   postgres:
     image: postgres:13.3-alpine
@@ -46,6 +48,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "54321:5432"
+
+  mailer:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "8081:8025"
 
 volumes:
   dashboard-postgres:
