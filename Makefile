@@ -3,6 +3,7 @@ down: docker-down
 restart: docker-down docker-up
 init: docker-down-clear docker-pull docker-build docker-up dashboard-init
 test: dashboard-test
+test-init: dashboard-test-db dashboard-test-schema dashboard-test-fixtures
 
 docker-up:
 	docker-compose up -d
@@ -35,6 +36,15 @@ dashboard-fixtures:
 
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
+
+dashboard-test-db:
+	docker-compose run --rm php-cli php bin/console --env=test doctrine:database:create --if-not-exists --no-interaction
+
+dashboard-test-schema:
+	docker-compose run --rm php-cli php bin/console --env=test doctrine:schema:create --no-interaction
+
+dashboard-test-fixtures:
+	docker-compose run --rm php-cli php bin/console --env=test doctrine:fixtures:load --no-interaction
 
 build-production:
 	docker build --pull -f dashboard/docker/production/nginx/nginx.docker -t ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG} dashboard
