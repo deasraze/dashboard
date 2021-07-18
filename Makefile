@@ -20,10 +20,13 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-dashboard-init: dashboard-composer-install dashboard-wait-db dashboard-migrations dashboard-fixtures
+dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures
 
 dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
+
+dashboard-assets-install:
+	docker-compose run --rm node yarn install
 
 dashboard-wait-db:
 	until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done
