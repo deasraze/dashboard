@@ -37,6 +37,9 @@ dashboard-migrations:
 dashboard-fixtures:
 	docker-compose run --rm php-cli php bin/console doctrine:fixtures:load --no-interaction
 
+dashboard-assets-dev:
+	docker-compose run --rm node npm run dev
+
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
 
