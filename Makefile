@@ -1,6 +1,6 @@
-up: docker-up
+up: docker-up dashboard-assets-watch
 down: docker-down
-restart: docker-down docker-up
+restart: docker-down docker-up dashboard-assets-watch
 init: docker-down-clear docker-pull docker-build docker-up dashboard-init
 test: dashboard-test
 test-init: dashboard-test-db dashboard-test-schema dashboard-test-fixtures
@@ -20,7 +20,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures
+dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures dashboard-assets-watch
 
 dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
@@ -39,6 +39,9 @@ dashboard-fixtures:
 
 dashboard-assets-dev:
 	docker-compose run --rm node npm run dev
+
+dashboard-assets-watch:
+	docker-compose run --name node-watch -d node-watch
 
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit

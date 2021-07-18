@@ -56,6 +56,16 @@ services:
       - ./dashboard:/app
     working_dir: /app
 
+  node-watch:
+    image: node:lts-alpine3.14
+    user: ${USER_ID}:${GROUP_ID}
+    volumes:
+      - ./dashboard:/app
+    working_dir: /app
+    command: npm run watch
+    profiles:
+      - "watch"
+
   mailer:
     image: mailhog/mailhog:v1.0.1
     ports:
