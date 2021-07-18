@@ -27,6 +27,7 @@ dashboard-composer-install:
 
 dashboard-assets-install:
 	docker-compose run --rm node yarn install
+	docker-compose run --rm node npm rebuild node-sass
 
 dashboard-wait-db:
 	until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done
