@@ -1,4 +1,4 @@
-FROM php:7.4.16-fpm AS builder
+FROM php:7.4.16-cli AS php-cli-builder
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
@@ -13,6 +13,20 @@ RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader
 
 ################################################################
 
+FROM node:lts-alpine3.14 AS node-builder
+
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./
+
+RUN yarn install && npm rebuild node-sass
+
+COPY ./ ./
+
+RUN npm run build
+
+################################################################
+
 FROM php:7.4.16-fpm
 
 RUN apt-get update && apt-get install -y libpq-dev \
@@ -24,7 +38,8 @@ COPY ./docker/production/php/conf/default.ini /usr/local/etc/php/conf.d/default.
 
 WORKDIR /app
 
-COPY --from=builder /app ./
+COPY --from=php-cli-builder /app ./
+COPY --from=node-builder /app/public/build ./public/build
 
 COPY ./ ./
 
