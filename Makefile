@@ -61,12 +61,14 @@ build-production:
 	docker build --pull -f dashboard/docker/production/php/php-fpm.docker -t ${REGISTRY_ADDRESS}/php-fpm:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/php/php-cli.docker -t ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/postgres/postgres.docker -t ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG} dashboard
+	docker build --pull -f dashboard/docker/production/redis/redis.docker -t ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG} dashboard
 
 push-production:
 	docker push ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/php-fpm:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG}
 
 deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'rm -rf docker-compose.yml .env'
@@ -75,6 +77,7 @@ deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "IMAGE_TAG=${IMAGE_TAG}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "DASHBOARD_APP_SECRET=${DASHBOARD_APP_SECRET}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "DASHBOARD_DB_PASSWORD=${DASHBOARD_DB_PASSWORD}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "DASHBOARD_REDIS_PASSWORD=${DASHBOARD_REDIS_PASSWORD}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "DASHBOARD_OAUTH_GITHUB_SECRET=${DASHBOARD_OAUTH_GITHUB_SECRET}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose pull'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose up --build -d'

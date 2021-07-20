@@ -15,10 +15,12 @@ services:
     environment:
       APP_SECRET: ${DASHBOARD_APP_SECRET}
       DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
+      REDIS_URL: tcp://redis:6379?password=${DASHBOARD_REDIS_PASSWORD}
       MAILER_DSN: smtp://localhost
       OAUTH_GITHUB_SECRET: ${DASHBOARD_OAUTH_GITHUB_SECRET}
     depends_on:
       - postgres
+      - redis
 
   php-cli:
     image: ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
@@ -26,10 +28,12 @@ services:
     environment:
       APP_SECRET: ${DASHBOARD_APP_SECRET}
       DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
+      REDIS_URL: tcp://redis:6379?password=${DASHBOARD_REDIS_PASSWORD}
       MAILER_DSN: smtp://localhost
       OAUTH_GITHUB_SECRET: ${DASHBOARD_OAUTH_GITHUB_SECRET}
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG}
@@ -41,5 +45,13 @@ services:
       POSTGRES_PASSWORD: ${DASHBOARD_DB_PASSWORD}
       POSTGRES_DB: dashboard
 
+  redis:
+    image: ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG}
+    restart: always
+    volumes:
+      - dashboard-redis:/data
+    command: redis-server --requirepass ${DASHBOARD_REDIS_PASSWORD}
+
 volumes:
   dashboard-postgres:
+  dashboard-redis:
