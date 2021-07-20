@@ -1,16 +1,33 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth.html.twig' %}
 
 {% block title %}Password reset{% endblock %}
 
 {% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card p-4 mb-0">
+                <div class="card-body p-4">
+                    {% include '_flashes.html.twig' %}
 
-    <h1>Password reset</h1>
+                    <h1>Password reset</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Change Password</button>
+                    {{ form_start(form) }}
+
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="cil-lock-locked"></i></span>
+                        </div>
+                        {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+                    <button class="btn btn-primary px-4" type="submit">Change Password</button>
+
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+        </div>
     </div>
-    {{ form_end(form) }}
-
+</div>
 {% endblock %}

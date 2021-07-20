@@ -1,46 +1,72 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card-group d-block d-md-flex row">
+                <div class="card col-md-7 p-4 mb-0">
+                    <div class="card-body">
+                        {% include '_flashes.html.twig' %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        <h1>Login</h1>
+
+                        <p class="text-medium-emphasis">Sign In to your account</p>
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <form method="post">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="cil-user"></i></span>
+                                <input class="form-control" type="email" value="{{ last_username }}" name="email" placeholder="Email">
+                            </div>
+                            <div class="input-group mb-4">
+                                <span class="input-group-text"><i class="cil-lock-locked"></i></span>
+                                <input class="form-control" type="password" name="password" placeholder="Password">
+                            </div>
+                            <input type="hidden" name="_csrf_token"
+                                   value="{{ csrf_token('authenticate') }}"
+                            >
+                            <div class="form-group">
+                                <div class="checkbox mb-3">
+                                    <label>
+                                        <input class="me-1" type="checkbox" name="_remember_me">
+                                        <span class="text-muted">Remember me</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-primary px-4" type="submit">Login</button>
+                                </div>
+                                <div class="col-6">
+                                    <a href="{{ path('oauth.github') }}" class="btn btn-block btn-primary px-4">
+                                        <i class="cib-github"><span class="ms-2">GutHub</span></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row justify-content-end pt-2">
+                                <div class="col-6">
+                                    <a class="btn btn-link px-0" href="{{ path('auth.reset') }}">Forgot
+                                        password?</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card col-md-5 text-white bg-primary py-5">
+                    <div class="d-flex card-body align-items-center text-center">
+                        <div>
+                            <h2>Sign up</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <a href="{{ path('auth.signup') }}" class="btn btn-lg btn-outline-light mt-3">Register Now!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
-
-    <h1>Sign In</h1>
-
-    <div class="form-group">
-        <label for="inputEmail" class="sr-only control-label required">Email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
     </div>
-    <div class="form-group">
-        <label for="inputPassword" class="sr-only control-label required">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-    </div>
-
-    <div class="form-group">
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    </div>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="form-group">
-        <button class="btn btn-primary" type="submit">Sign In</button>
-    </div>
-
-    <a href="{{ path('oauth.github') }}" class="btn btn-primary">Sign In via GitHub</a>
-</form>
+</div>
 {% endblock %}
