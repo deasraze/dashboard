@@ -31,7 +31,7 @@ class ConfirmCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('email', null, InputOption::VALUE_OPTIONAL, 'User email');
+            ->addOption('email', 'm', InputOption::VALUE_OPTIONAL, 'User email');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
