@@ -59,4 +59,20 @@ class UserFetcher
 
         return $this->denormalizer->denormalize($result, AuthView::class);
     }
+
+    public function findByEmail(string $email): ?ShortView
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('id, email, role, status')
+            ->from('user_users')
+            ->where('email = :email')
+            ->setParameter(':email', $email)
+            ->execute()->fetchAssociative();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $this->denormalizer->denormalize($result, ShortView::class);
+    }
 }
