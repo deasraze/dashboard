@@ -3,42 +3,51 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mb-4 mx-4">
-                <div class="card-body p-4">
-                    {% include '_flashes.html.twig' %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mx-4">
+                    <div class="card-body p-4">
+                        {% include '_flashes.html.twig' %}
 
-                    <h1>Sign Up</h1>
-                    <p class="text-medium-emphasis">Create your account</p>
+                        <h1>Sign Up</h1>
 
-                    {{ form_start(form) }}
+                        <p class="text-muted">Create your account</p>
 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text"><i class="cil-user"></i></span>
-                        {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
-                        {{ form_errors(form.email) }}
+                        {{ form_start(form) }}
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@</span>
+                            </div>
+                            {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="icon-lock"></i>
+                                </span>
+                            </div>
+                            {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
+                            {{ form_errors(form.password) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-block btn-success">Create Account</button>
+
+                        {{ form_end(form) }}
                     </div>
-                    <div class="input-group mb-3"><span class="input-group-text"><i class="cil-lock-locked"></i></span>
-                        {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
-                        {{ form_errors(form.password) }}
-                    </div>
-                    <button class="btn btn-block btn-primary" type="submit">Create Account</button>
-
-                    {{ form_end(form) }}
-                </div>
-                <div class="card-footer p-4">
-                    <div class="row">
-                        <div class="col-6">
-                            <a class="btn btn-block btn-primary cib-github" href="{{ path('oauth.github') }}">
-                                <span>GitHub</span>
-                            </a>
+                    <div class="card-footer p-4">
+                        <div class="row">
+                            <div class="col-12">
+                                <a class="btn btn-block btn-github" href="{{ path('oauth.github') }}">
+                                    <i class="icon-social-github mr-2"></i><span>GitHub</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
