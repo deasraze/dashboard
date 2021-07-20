@@ -15,9 +15,7 @@
                     {{ form_start(form) }}
 
                     <div class="input-group mb-4">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="cil-user"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="cil-user"></i></span>
                         {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
                         {{ form_errors(form.email) }}
                     </div>

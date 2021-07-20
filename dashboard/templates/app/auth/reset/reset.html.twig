@@ -15,9 +15,7 @@
                     {{ form_start(form) }}
 
                     <div class="input-group mb-4">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="cil-lock-locked"></i></span>
-                        </div>
+                        <span class="input-group-text"><i class="cil-lock-locked"></i></span>
                         {{ form_widget(form.password, {'attr': {'placeholder': 'Password'}}) }}
                         {{ form_errors(form.password) }}
                     </div>
