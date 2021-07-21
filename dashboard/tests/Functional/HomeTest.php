@@ -15,7 +15,7 @@ class HomeTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        $this->assertResponseRedirects('/login', '302');
+        $this->assertResponseRedirects('/login', 302);
     }
 
     public function testSuccess(): void
@@ -23,7 +23,7 @@ class HomeTest extends WebTestCase
         $client = static::createClient();
         $fetcher = static::getContainer()->get(UserFetcher::class);
 
-        $testUser = $fetcher->findForAuth('admin@app.test');
+        $testUser = $fetcher->findForAuthByEmail('admin@app.test');
 
         $client->loginUser(new UserIdentity(
             $testUser->id,
