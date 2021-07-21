@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Builder\User;
 
 use App\Model\User\Entity\User\Email;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\OAuth;
 
 use App\Model\User\UseCase\Network\Auth\Command;
