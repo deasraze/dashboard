@@ -75,4 +75,28 @@ class UserFetcher
 
         return $this->denormalizer->denormalize($result, ShortView::class);
     }
+
+    public function findDetail(string $id): ?DetailView
+    {
+        $stmt = $this->connection->createQueryBuilder()
+            ->select('id, date, email, role, status')
+            ->from('user_users')
+            ->where('id = :id')
+            ->setParameter(':id', $id)
+            ->execute();
+
+        /* @var DetailView $view */
+        $view = $this->denormalizer->denormalize($stmt->fetchAssociative(), DetailView::class);
+
+        $stmt = $this->connection->createQueryBuilder()
+            ->select('network, identity')
+            ->from('user_user_networks')
+            ->where('user_id = :id')
+            ->setParameter(':id', $id)
+            ->execute();
+
+        $view->networks = $this->denormalizer->denormalize($stmt->fetchAllAssociative(), NetworkView::class . '[]');
+
+        return $view;
+    }
 }
