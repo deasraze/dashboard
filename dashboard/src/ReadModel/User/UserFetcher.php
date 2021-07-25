@@ -78,6 +78,22 @@ class UserFetcher
         return $this->denormalizer->denormalize($result, ShortView::class);
     }
 
+    public function findBySignUpConfirmToken(string $token): ?ShortView
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('id, email, role, status')
+            ->from('user_users')
+            ->where('confirm_token = :token')
+            ->setParameter(':token', $token)
+            ->execute()->fetchAssociative();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $this->denormalizer->denormalize($result, ShortView::class);
+    }
+
     public function findDetail(string $id): ?DetailView
     {
         $stmt = $this->connection->createQueryBuilder()
