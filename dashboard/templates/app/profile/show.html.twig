@@ -48,22 +48,23 @@
         </div>
     </div>
 
-    {% if user.networks %}
-        <div class="card">
-            <div class="card-header">Networks</div>
-            <div class="card-body">
-                <table class="table table-bordered mb-0">
+    <div class="card">
+        <div class="card-header">Networks</div>
+        <div class="card-body">
+            {% if user.networks %}
+                <table class="table table-bordered">
                     <tbody>
-                    {% for network in user.networks %}
-                        <tr>
-                            <th>{{ network.network }}</th>
-                            <td>{{ network.identity }}</td>
-                        </tr>
-                    {% endfor %}
+                        {% for network in user.networks %}
+                            <tr>
+                                <th>{{ network.network }}</th>
+                                <td>{{ network.identity }}</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            {% endif %}
+            <a href="{{ path('profile.oauth.github') }}" class="btn btn-github">Attach GitHub</a>
         </div>
-    {% endif %}
+    </div>
 
 {% endblock %}

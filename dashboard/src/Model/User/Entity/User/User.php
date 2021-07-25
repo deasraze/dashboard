@@ -105,6 +105,17 @@ class User
         $this->confirmToken = null;
     }
 
+    public function attachNetwork(string $network, string $identity): void
+    {
+        foreach ($this->networks as $existing) {
+            if ($existing->isForNetwork($network)) {
+                throw new \DomainException('Network is already attached.');
+            }
+        }
+
+        $this->networks->add(new Network($this, $network, $identity));
+    }
+
     public function requestPasswordReset(ResetToken $resetToken, \DateTimeImmutable $date): void
     {
         if (!$this->isActive()) {
@@ -246,16 +257,5 @@ class User
         if ($this->resetToken->isEmpty()) {
             $this->resetToken = null;
         }
-    }
-
-    private function attachNetwork(string $network, string $identity): void
-    {
-        foreach ($this->networks as $existing) {
-            if ($existing->isForNetwork($network)) {
-                throw new \DomainException('Network is already attached.');
-            }
-        }
-
-        $this->networks->add(new Network($this, $network, $identity));
     }
 }
