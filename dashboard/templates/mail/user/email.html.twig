@@ -1,0 +1,11 @@
+{% extends 'mail.html.twig' %}
+
+{% block body %}
+
+    <p>Follow this link to confirm email:</p>
+
+    {% set url = url('profile.email.confirm', {'token': token}) %}
+
+    <p><a href="{{ url }}">{{ url }}</a></p>
+
+{% endblock %}

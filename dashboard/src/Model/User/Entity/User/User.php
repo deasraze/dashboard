@@ -42,6 +42,14 @@ class User
      */
     private ?string $confirmToken = null;
     /**
+     * @ORM\Column(type="user_user_email", nullable=true, name="new_email")
+     */
+    private ?Email $newEmail = null;
+    /**
+     * @ORM\Column(type="string", nullable=true, name="new_email_token")
+     */
+    private ?string $newEmailToken = null;
+    /**
      * @ORM\Embedded(class="ResetToken", columnPrefix="reset_token_")
      */
     private ?ResetToken $resetToken = null;
@@ -128,6 +136,36 @@ class User
         $this->resetToken = null;
     }
 
+    public function requestEmailChanging(Email $email, string $token): void
+    {
+        if (!$this->isActive()) {
+            throw new \DomainException('User is not active.');
+        }
+
+        if (null !== $this->email && $this->email->isEqualTo($email)) {
+            throw new \DomainException('Email is already same.');
+        }
+
+        $this->newEmail = $email;
+        $this->newEmailToken = $token;
+    }
+
+    public function confirmEmailChanging(string $token): void
+    {
+        if (null === $this->newEmailToken) {
+            throw new \DomainException('Email changing is not requested.');
+        }
+
+        if ($this->newEmailToken !== $token) {
+            throw new \DomainException('Incorrect email changing token.');
+        }
+
+        $this->email = $this->newEmail;
+
+        $this->newEmail = null;
+        $this->newEmailToken = null;
+    }
+
     public function changeRole(Role $role): void
     {
         if ($this->role->isEqual($role)) {
@@ -170,6 +208,16 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
+    }
+
+    public function getNewEmail(): ?Email
+    {
+        return $this->newEmail;
+    }
+
+    public function getNewEmailToken(): ?string
+    {
+        return $this->newEmailToken;
     }
 
     public function getResetToken(): ?ResetToken
