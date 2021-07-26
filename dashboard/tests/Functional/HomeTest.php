@@ -35,6 +35,6 @@ class HomeTest extends WebTestCase
 
         $client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Hello');
+        $this->assertSelectorTextContains('title', 'Home');
     }
 }
