@@ -9,6 +9,7 @@ use App\Model\User\UseCase\Network\Auth\Handler;
 use App\Security\UserProvider;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
+use League\OAuth2\Client\Provider\GithubResourceOwner;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,18 +48,23 @@ class GithubAuthenticator extends OAuth2Authenticator
     public function authenticate(Request $request): PassportInterface
     {
         $client = $this->clientRegistry->getClient('github');
-        $accessToken = $this->fetchAccessToken($client);
+        /* @var GithubResourceOwner $githubUser */
+        $githubUser = $client->fetchUserFromToken($this->fetchAccessToken($client));
 
         $network = 'github';
-        $id = $client->fetchUserFromToken($accessToken)->getId();
+        $id = (string) $githubUser->getId();
         $username = $network . ':' . $id;
 
+        $command = new Command($network, $id);
+        $command->firstName = $githubUser->getName();
+        $command->lastName = $githubUser->getNickname();
+
         return new SelfValidatingPassport(
-            new UserBadge($username, function ($identifier) use ($network, $id) {
+            new UserBadge($username, function ($identifier) use ($command) {
                 try {
                     return $this->provider->loadUserByIdentifier($identifier);
                 } catch (UserNotFoundException $e) {
-                    $this->handler->handle(new Command($network, $id));
+                    $this->handler->handle($command);
 
                     return $this->provider->loadUserByIdentifier($identifier);
                 }

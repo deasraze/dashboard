@@ -97,7 +97,7 @@ class UserFetcher
     public function findDetail(string $id): ?DetailView
     {
         $stmt = $this->connection->createQueryBuilder()
-            ->select('id, date, email, role, status')
+            ->select('id, date, name_first first_name, name_last last_name, email, role, status')
             ->from('user_users')
             ->where('id = :id')
             ->setParameter(':id', $id)

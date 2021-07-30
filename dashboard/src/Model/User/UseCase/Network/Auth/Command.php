@@ -8,6 +8,8 @@ class Command
 {
     public string $network;
     public string $identity;
+    public string $firstName;
+    public string $lastName;
 
     public function __construct(string $network, string $identity)
     {

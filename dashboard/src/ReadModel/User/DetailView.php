@@ -8,6 +8,8 @@ class DetailView
 {
     public string $id;
     public \DateTimeImmutable $date;
+    public string $firstName;
+    public string $lastName;
     public ?string $email = null;
     public string $role;
     public string $status;
