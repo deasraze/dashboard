@@ -21,6 +21,15 @@
                     <td>{{ user.id }}</td>
                 </tr>
                 <tr>
+                    <th>Name</th>
+                    <td>
+                        {{ user.last_name }} {{ user.first_name }}
+                        <a href="{{ path('profile.name') }}" class="mx-2 btn btn-sm btn-outline-primary">
+                            <span class="fa fa-pencil"></span>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
                     <th>Created</th>
                     <td>{{ user.date|date('Y-m-d H:i:s') }}</td>
                 </tr>

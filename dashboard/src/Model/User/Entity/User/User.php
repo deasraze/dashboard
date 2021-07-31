@@ -182,6 +182,11 @@ class User
         $this->newEmailToken = null;
     }
 
+    public function changeName(Name $name): void
+    {
+        $this->name = $name;
+    }
+
     public function changeRole(Role $role): void
     {
         if ($this->role->isEqual($role)) {
@@ -224,6 +229,11 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
+    }
+
+    public function getName(): Name
+    {
+        return $this->name;
     }
 
     public function getNewEmail(): ?Email
