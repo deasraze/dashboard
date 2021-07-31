@@ -6,25 +6,28 @@ namespace App\Tests\Builder\User;
 
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
+use App\Model\User\Entity\User\Name;
 use App\Model\User\Entity\User\User;
 
 class UserBuilder
 {
-    private $id;
-    private $date;
+    private Id $id;
+    private \DateTimeImmutable $date;
+    private Name $name;
 
-    private $email;
-    private $hash;
-    private $token;
-    private $confirmed;
+    private ?Email $email = null;
+    private ?string $hash = null;
+    private ?string $token = null;
+    private bool $confirmed = false;
 
-    private $network;
-    private $identity;
+    private ?string $network = null;
+    private ?string $identity = null;
 
     public function __construct()
     {
         $this->id = Id::next();
         $this->date = new \DateTimeImmutable();
+        $this->name = new Name('First', 'Last');
     }
 
     public function viaEmail(Email $email = null, string $hash = null, string $token = null): self
@@ -60,6 +63,7 @@ class UserBuilder
             $user = User::signUpByEmail(
                 $this->id,
                 $this->date,
+                $this->name,
                 $this->email,
                 $this->hash,
                 $this->token
@@ -76,6 +80,7 @@ class UserBuilder
             return User::signUpByNetwork(
                 $this->id,
                 $this->date,
+                $this->name,
                 $this->network,
                 $this->identity
             );
