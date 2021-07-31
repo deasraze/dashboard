@@ -31,7 +31,14 @@ class UserFetcher
     public function findForAuthByEmail(string $email): ?AuthView
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('id, email, password_hash, role, status')
+            ->select(
+                'id',
+                'email',
+                'password_hash',
+                'TRIM(CONCAT(name_last, \' \', name_first)) AS name',
+                'role',
+                'status'
+            )
             ->from('user_users')
             ->where('email = :email')
             ->setParameter(':email', $email)
@@ -47,7 +54,14 @@ class UserFetcher
     public function findForAuthByNetwork(string $network, string $identity): ?AuthView
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('u.id, u.email, u.password_hash, u.role, u.status')
+            ->select(
+                'u.id',
+                'u.email',
+                'u.password_hash',
+                'TRIM(CONCAT(u.name_last, \' \', u.name_first)) AS name',
+                'u.role',
+                'u.status'
+            )
             ->from('user_users', 'u')
             ->innerJoin('u', 'user_user_networks', 'n', 'n.user_id = u.id')
             ->where('n.network = :network AND n.identity = :identity')
