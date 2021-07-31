@@ -3,7 +3,7 @@ down: docker-down
 restart: docker-down docker-up dashboard-assets-watch
 init: docker-down-clear docker-pull docker-build docker-up dashboard-init
 test: dashboard-test
-test-init: dashboard-test-db dashboard-test-schema dashboard-test-fixtures
+test-init: dashboard-test-db-init dashboard-test
 
 docker-up:
 	docker-compose up -d
@@ -44,8 +44,13 @@ dashboard-assets-dev:
 dashboard-assets-watch:
 	docker-compose run --name node-watch -d node-watch
 
+dashboard-test-db-init: dashboard-test-drop-db dashboard-test-db dashboard-test-schema dashboard-test-fixtures
+
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
+
+dashboard-test-drop-db:
+	docker-compose run --rm php-cli php bin/console --env=test doctrine:database:drop --if-exists --force --no-interaction
 
 dashboard-test-db:
 	docker-compose run --rm php-cli php bin/console --env=test doctrine:database:create --if-not-exists --no-interaction
