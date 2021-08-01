@@ -19,6 +19,7 @@ class User
 {
     private const STATUS_WAIT = 'wait';
     public const STATUS_ACTIVE = 'active';
+    private const STATUS_BLOCKED = 'blocked';
 
     /**
      * @ORM\Column(type="user_user_id")
@@ -226,14 +227,37 @@ class User
         $this->role = $role;
     }
 
+    public function activate(): void
+    {
+        if ($this->isActive()) {
+            throw new \DomainException('User is already active.');
+        }
+
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    public function block(): void
+    {
+        if ($this->isBlocked()) {
+            throw new \DomainException('User is already blocked.');
+        }
+
+        $this->status = self::STATUS_BLOCKED;
+    }
+
     public function isActive(): bool
     {
-        return ($this->status === self::STATUS_ACTIVE);
+        return $this->status === self::STATUS_ACTIVE;
     }
 
     public function isWait(): bool
     {
-        return ($this->status === self::STATUS_WAIT);
+        return $this->status === self::STATUS_WAIT;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->status === self::STATUS_BLOCKED;
     }
 
     public function getId(): Id
