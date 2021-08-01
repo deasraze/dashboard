@@ -213,6 +213,12 @@ class User
         $this->newEmailToken = null;
     }
 
+    public function edit(Name $name, Email $email): void
+    {
+        $this->name = $name;
+        $this->email = $email;
+    }
+
     public function changeName(Name $name): void
     {
         $this->name = $name;
