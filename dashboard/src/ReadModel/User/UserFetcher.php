@@ -18,6 +18,23 @@ class UserFetcher
         $this->denormalizer = $denormalizer;
     }
 
+    public function all(): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                'id',
+                'date',
+                'email',
+                'TRIM(CONCAT(name_last, \' \', name_first)) AS name',
+                'role',
+                'status',
+            )
+            ->from('user_users')
+            ->orderBy('date', 'DESC')
+            ->execute()
+            ->fetchAllAssociative();
+    }
+
     public function existsByResetToken(string $token): bool
     {
         return $this->connection->createQueryBuilder()
