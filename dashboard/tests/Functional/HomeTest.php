@@ -29,6 +29,7 @@ class HomeTest extends WebTestCase
             $testUser->id,
             $testUser->email,
             $testUser->password_hash,
+            $testUser->name,
             $testUser->role,
             $testUser->status
         ));
