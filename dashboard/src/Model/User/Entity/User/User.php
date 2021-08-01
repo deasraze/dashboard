@@ -80,9 +80,21 @@ class User
         $this->networks = new ArrayCollection();
     }
 
+    public static function create(Id $id, \DateTimeImmutable $date, Name $name, Email $email, string $hash): self
+    {
+        $user = new self($id, $date, $name);
+
+        $user->email = $email;
+        $user->passwordHash = $hash;
+        $user->status = self::STATUS_ACTIVE;
+
+        return $user;
+    }
+
     public static function signUpByEmail(Id $id, \DateTimeImmutable $date, Name $name, Email $email, string $hash, string $token): self
     {
         $user = new self($id, $date, $name);
+
         $user->email = $email;
         $user->passwordHash = $hash;
         $user->confirmToken = $token;
@@ -94,6 +106,7 @@ class User
     public static function signUpByNetwork(Id $id, \DateTimeImmutable $date, Name $name, string $network, string $identity): self
     {
         $user = new self($id, $date, $name);
+
         $user->attachNetwork($network, $identity);
         $user->status = self::STATUS_ACTIVE;
 
