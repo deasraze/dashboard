@@ -268,6 +268,11 @@ class User
         return $this->resetToken;
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function getRole(): Role
     {
         return $this->role;
