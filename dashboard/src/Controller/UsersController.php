@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\User\Entity\User\User;
+use App\Model\User\UseCase\Activate;
+use App\Model\User\UseCase\Block;
 use App\Model\User\UseCase\Create;
 use App\Model\User\UseCase\Edit;
 use App\Model\User\UseCase\Role;
@@ -134,6 +136,48 @@ class UsersController extends AbstractController
         }
 
         $command = new Confirm\Manual\Command($user->getId()->getValue());
+
+        try {
+            $handler->handle($command);
+        } catch (\DomainException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectToRoute('users.show', ['id' => $user->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/activate", name="users.activate", methods={"POST"})
+     */
+    public function activate(User $user, Request $request, Activate\Handler $handler): Response
+    {
+        if (!$this->isCsrfTokenValid('activate', $request->request->get('token'))) {
+            return $this->redirectToRoute('users.show', ['id' => $user->getId()]);
+        }
+
+        $command = new Activate\Command($user->getId()->getValue());
+
+        try {
+            $handler->handle($command);
+        } catch (\DomainException $e) {
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectToRoute('users.show', ['id' => $user->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/block", name="users.block", methods={"POST"})
+     */
+    public function block(User $user, Request $request, Block\Handler $handler): Response
+    {
+        if (!$this->isCsrfTokenValid('block', $request->request->get('token'))) {
+            return $this->redirectToRoute('users.show', ['id' => $user->getId()]);
+        }
+
+        $command = new Block\Command($user->getId()->getValue());
 
         try {
             $handler->handle($command);
