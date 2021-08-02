@@ -23,6 +23,12 @@ class Handler
 
     public function handle(Command $command): void
     {
+        $email = new Email($command->email);
+
+        if ($this->users->hasByEmail($email)) {
+            throw new \DomainException('Email is already used.');
+        }
+
         $user = $this->users->get(new Id($command->id));
 
         $user->edit(
@@ -30,7 +36,7 @@ class Handler
                 $command->firstName,
                 $command->lastName
             ),
-            new Email($command->email)
+            $email
         );
 
         $this->flusher->flush();
