@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\ReadModel\User;
 
+use App\ReadModel\User\Filter\Filter;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -18,9 +19,9 @@ class UserFetcher
         $this->denormalizer = $denormalizer;
     }
 
-    public function all(): array
+    public function all(Filter $filter): array
     {
-        return $this->connection->createQueryBuilder()
+        $qb = $this->connection->createQueryBuilder()
             ->select(
                 'id',
                 'date',
@@ -30,9 +31,29 @@ class UserFetcher
                 'status',
             )
             ->from('user_users')
-            ->orderBy('date', 'DESC')
-            ->execute()
-            ->fetchAllAssociative();
+            ->orderBy('date', 'DESC');
+
+        if (null !== $filter->name) {
+            $qb->andWhere($qb->expr()->like('LOWER(CONCAT(name_last, \' \', name_first))', ':name'));
+            $qb->setParameter(':name', '%' . \mb_strtolower($filter->name) . '%');
+        }
+
+        if (null !== $filter->email) {
+            $qb->andWhere($qb->expr()->like('email', ':email'));
+            $qb->setParameter(':email', '%' . \mb_strtolower($filter->email) . '%');
+        }
+
+        if (null !== $filter->role) {
+            $qb->andWhere('role = :role');
+            $qb->setParameter(':role', $filter->role);
+        }
+
+        if (null !== $filter->status) {
+            $qb->andWhere('status = :status');
+            $qb->setParameter(':status', $filter->status);
+        }
+
+        return $qb->execute()->fetchAllAssociative();
     }
 
     public function existsByResetToken(string $token): bool
