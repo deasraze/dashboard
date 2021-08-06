@@ -46,7 +46,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for user in users %}
+            {% for user in pagination %}
                 <tr>
                     <td>{{ user.date|date('Y-m-d') }}</td>
                     <td>
@@ -59,6 +59,10 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
     </div>
 
 {% endblock %}
