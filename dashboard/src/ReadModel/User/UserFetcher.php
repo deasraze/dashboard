@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\ReadModel\User;
 
+use App\Model\User\Entity\User\User;
+use App\ReadModel\NotFoundException;
 use App\ReadModel\User\Filter\Filter;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -13,14 +17,29 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class UserFetcher
 {
     private Connection $connection;
+    private EntityRepository $repository;
     private PaginatorInterface $paginator;
     private DenormalizerInterface $denormalizer;
 
-    public function __construct(Connection $connection, PaginatorInterface $paginator, DenormalizerInterface $denormalizer)
-    {
+    public function __construct(
+        Connection $connection,
+        EntityManagerInterface $em,
+        PaginatorInterface $paginator,
+        DenormalizerInterface $denormalizer
+    ) {
         $this->connection = $connection;
+        $this->repository = $em->getRepository(User::class);
         $this->paginator = $paginator;
         $this->denormalizer = $denormalizer;
+    }
+
+    public function get(string $id): User
+    {
+        if (!$user = $this->repository->find($id)) {
+            throw new NotFoundException('User is not found.');
+        }
+
+        return $user;
     }
 
     public function all(Filter $filter, int $page, int $size, string $sort, string $direction): PaginationInterface
@@ -153,38 +172,5 @@ class UserFetcher
         }
 
         return $this->denormalizer->denormalize($result, ShortView::class);
-    }
-
-    public function findDetail(string $id): ?DetailView
-    {
-        $stmt = $this->connection->createQueryBuilder()
-            ->select('id, date, name_first first_name, name_last last_name, email, role, status')
-            ->from('user_users')
-            ->where('id = :id')
-            ->setParameter(':id', $id)
-            ->execute();
-
-        /* @var DetailView $view */
-        $view = $this->denormalizer->denormalize($stmt->fetchAssociative(), DetailView::class);
-
-        $stmt = $this->connection->createQueryBuilder()
-            ->select('network, identity')
-            ->from('user_user_networks')
-            ->where('user_id = :id')
-            ->setParameter(':id', $id)
-            ->execute();
-
-        $view->networks = $this->denormalizer->denormalize($stmt->fetchAllAssociative(), NetworkView::class . '[]');
-
-        return $view;
-    }
-
-    public function getDetail(string $id): DetailView
-    {
-        if (null === $detail = $this->findDetail($id)) {
-            throw new \LogicException('User is not found.');
-        }
-
-        return $detail;
     }
 }
