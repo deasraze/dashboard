@@ -42,5 +42,4 @@ security:
          - { path: ^/oauth, roles: PUBLIC_ACCESS }
          - { path: ^/signup, roles: PUBLIC_ACCESS }
          - { path: ^/reset, roles: PUBLIC_ACCESS }
-         - { path: ^/users, roles: ROLE_MANAGE_USERS }
          - { path: ^/, roles: ROLE_USER }
