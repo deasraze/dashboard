@@ -23,7 +23,7 @@ class UserFetcher
         $this->denormalizer = $denormalizer;
     }
 
-    public function all(Filter $filter, int $page, int $size): PaginationInterface
+    public function all(Filter $filter, int $page, int $size, string $sort, string $direction): PaginationInterface
     {
         $qb = $this->connection->createQueryBuilder()
             ->select(
@@ -34,8 +34,7 @@ class UserFetcher
                 'role',
                 'status',
             )
-            ->from('user_users')
-            ->orderBy('date', 'DESC');
+            ->from('user_users');
 
         if (null !== $filter->name) {
             $qb->andWhere($qb->expr()->like('LOWER(CONCAT(name_last, \' \', name_first))', ':name'));
@@ -56,6 +55,12 @@ class UserFetcher
             $qb->andWhere('status = :status');
             $qb->setParameter(':status', $filter->status);
         }
+
+        if (!\in_array($sort, ['date', 'email', 'name', 'role', 'status'], true)) {
+            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
+        }
+
+        $qb->orderBy($sort, $direction === 'desc' ? 'desc' : 'asc');
 
         return $this->paginator->paginate($qb, $page, $size);
     }

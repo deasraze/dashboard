@@ -43,7 +43,13 @@ class UsersController extends AbstractController
         $form = $this->createForm(Filter\Form::class, $filter);
         $form->handleRequest($request);
 
-        $pagination = $users->all($filter, $request->query->getInt('page', 1), self::PER_PAGE);
+        $pagination = $users->all(
+            $filter,
+            $request->query->getInt('page', 1),
+            self::PER_PAGE,
+            $request->query->get('sort', 'date'),
+            $request->query->get('direction', 'desc')
+        );
 
         return $this->render('app/users/index.html.twig', [
             'pagination' => $pagination,
