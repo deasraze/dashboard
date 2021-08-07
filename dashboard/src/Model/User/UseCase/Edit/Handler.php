@@ -23,13 +23,13 @@ class Handler
 
     public function handle(Command $command): void
     {
+        $user = $this->users->get(new Id($command->id));
+
         $email = new Email($command->email);
 
-        if ($this->users->hasByEmail($email)) {
+        if (!$user->getEmail()->isEqualTo($email) && $this->users->hasByEmail($email)) {
             throw new \DomainException('Email is already used.');
         }
-
-        $user = $this->users->get(new Id($command->id));
 
         $user->edit(
             new Name(
