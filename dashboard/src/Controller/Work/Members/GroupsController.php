@@ -10,6 +10,7 @@ use App\Model\Work\UseCase\Members\Group\Edit;
 use App\Model\Work\UseCase\Members\Group\Remove;
 use App\ReadModel\Work\Members\GroupFetcher;
 use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/work/members/groups", name="work.members.groups")
+ * @IsGranted("ROLE_WORK_MANAGE_MEMBERS")
  */
 class GroupsController extends AbstractController
 {
