@@ -24,6 +24,7 @@ services:
 
     App\Model\User\Entity\User\UserRepository: ~
     App\Model\Work\Entity\Members\Group\GroupRepository: ~
+    App\Model\Work\Entity\Members\Member\MemberRepository: ~
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
