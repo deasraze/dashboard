@@ -27,7 +27,7 @@ class Command
     /**
      * @Assert\Email()
      */
-    public string $email;
+    public ?string $email;
 
     public function __construct(string $id)
     {

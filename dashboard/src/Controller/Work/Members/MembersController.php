@@ -73,7 +73,7 @@ class MembersController extends AbstractController
         $command = new Create\Command($user->getId()->getValue());
         $command->firstName = $user->getName()->getFirst();
         $command->lastName = $user->getName()->getLast();
-        $command->email = $user->getEmail()->getValue();
+        $command->email = $user->getEmail() ? $user->getEmail()->getValue() : null;
 
         $form = $this->createForm(Create\Form::class, $command);
         $form->handleRequest($request);
