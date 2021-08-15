@@ -21,6 +21,7 @@ class GroupFetcher
             ->select(
                 'g.id',
                 'g.name',
+                '(SELECT COUNT(m.id) FROM work_members_members AS m WHERE m.group_id = g.id) AS members'
             )
             ->from('work_members_groups', 'g')
             ->orderBy('name')
