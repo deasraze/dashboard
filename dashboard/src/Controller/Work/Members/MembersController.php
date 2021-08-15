@@ -50,7 +50,7 @@ class MembersController extends AbstractController
             $request->query->getInt('page', 1),
             self::PER_PAGE,
             $request->query->get('sort', 'name'),
-            $request->query->get('direction', 'desc')
+            $request->query->get('direction', 'asc')
         );
 
         return $this->render('app/work/members/index.html.twig', [
