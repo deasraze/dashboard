@@ -11,5 +11,5 @@ class Filter
     public ?string $name = null;
     public ?string $email = null;
     public ?string $group = null;
-    public string $status = Status::ACTIVE;
+    public ?string $status = Status::ACTIVE;
 }
