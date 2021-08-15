@@ -149,7 +149,7 @@ class MembersController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/archive", name=".archive")
+     * @Route("/{id}/archive", name=".archive", methods={"POST"})
      */
     public function archive(Member $member, Request $request, Archive\Handler $handler): Response
     {
@@ -176,7 +176,7 @@ class MembersController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/reinstate", name=".reinstate")
+     * @Route("/{id}/reinstate", name=".reinstate", methods={"POST"})
      */
     public function reinstate(Member $member, Request $request, Reinstate\Handler $handler): Response
     {
