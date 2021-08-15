@@ -71,4 +71,14 @@ class MemberFetcher
 
         return $this->paginator->paginate($qb, $page, $limit);
     }
+
+    public function exists(string $id): bool
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('COUNT(id)')
+            ->from('work_members_members')
+            ->where('id = :id')
+            ->setParameter(':id', $id)
+            ->execute()->fetchOne() > 0;
+    }
 }
