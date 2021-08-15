@@ -17,19 +17,21 @@
         <a href="{{ path('work.members.edit', {'id': member.id}) }}" class="btn btn-primary">Edit</a>
         <a href="{{ path('work.members.move', {'id': member.id}) }}" class="btn btn-primary">Move</a>
         <a href="{{ path('users.show', {'id': member.id}) }}" class="btn btn-primary">View User</a>
-        {% if member.active and member.id.value != app.user.id %}
-            <form action="{{ path('work.members.archive', {'id': member.id}) }}"
-                  method="post" onsubmit="return confirm('Are you sure?')">
-                <input type="hidden" name="token" value="{{ csrf_token('archive') }}" />
-                <button type="submit" class="btn btn-danger">Archive</button>
-            </form>
-        {% endif %}
-        {% if member.archived %}
-            <form action="{{ path('work.members.reinstate', {'id': member.id}) }}"
-                  method="post" onsubmit="return confirm('Are you sure?')">
-                <input type="hidden" name="token" value="{{ csrf_token('reinstate') }}" />
-                <button type="submit" class="btn btn-success">Reinstate</button>
-            </form>
+        {% if member.id.value != app.user.id %}
+            {% if member.active %}
+                <form action="{{ path('work.members.archive', {'id': member.id}) }}"
+                      method="post" onsubmit="return confirm('Are you sure?')">
+                    <input type="hidden" name="token" value="{{ csrf_token('archive') }}" />
+                    <button type="submit" class="btn btn-danger">Archive</button>
+                </form>
+            {% endif %}
+            {% if member.archived %}
+                <form action="{{ path('work.members.reinstate', {'id': member.id}) }}"
+                      method="post" onsubmit="return confirm('Are you sure?')">
+                    <input type="hidden" name="token" value="{{ csrf_token('reinstate') }}" />
+                    <button type="submit" class="btn btn-success">Reinstate</button>
+                </form>
+            {% endif %}
         {% endif %}
     </div>
 
