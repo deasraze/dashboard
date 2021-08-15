@@ -43,7 +43,7 @@ class SignUpController extends AbstractController
 
                 return $this->redirectToRoute('app_login');
             } catch (\DomainException $e) {
-                $this->logger->error($e->getMessage(), ['exception' => $e]);
+                $this->logger->warning($e->getMessage(), ['exception' => $e]);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -81,7 +81,7 @@ class SignUpController extends AbstractController
                 $request
             );
         } catch (\DomainException $e) {
-            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->logger->warning($e->getMessage(), ['exception' => $e]);
             $this->addFlash('error', $e->getMessage());
 
             return $this->redirectToRoute('auth.signup');

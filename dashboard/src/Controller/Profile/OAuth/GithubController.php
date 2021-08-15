@@ -52,7 +52,7 @@ class GithubController extends AbstractController
             $handler->handle($command);
             $this->addFlash('success', 'GitHub is successfully attached.');
         } catch (\DomainException $e) {
-            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->logger->warning($e->getMessage(), ['exception' => $e]);
             $this->addFlash('error', $e->getMessage());
         }
 
