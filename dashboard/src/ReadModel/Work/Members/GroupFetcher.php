@@ -36,6 +36,6 @@ class GroupFetcher
             ->orderBy('name')
             ->execute();
 
-        return \array_column($stmt->fetchAllAssociative(), 'name', 'id');
+        return $stmt->fetchAllKeyValue();
     }
 }
