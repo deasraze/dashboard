@@ -15,6 +15,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class UserFixture extends Fixture
 {
+    public const REFERENCE_ADMIN = 'user_user_admin';
+    public const REFERENCE_USER = 'user_user_user';
+
     private PasswordHasher $hasher;
 
     public function __construct(PasswordHasher $hasher)
@@ -46,6 +49,7 @@ class UserFixture extends Fixture
             $hash
         );
         $manager->persist($confirmed);
+        $this->addReference(self::REFERENCE_USER, $confirmed);
 
         $admin = $this->createAdminByEmail(
             new Name('Artur', 'Roze'),
@@ -53,6 +57,7 @@ class UserFixture extends Fixture
             $hash
         );
         $manager->persist($admin);
+        $this->addReference(self::REFERENCE_ADMIN, $admin);
 
         $manager->flush();
     }
