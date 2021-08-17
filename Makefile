@@ -56,7 +56,7 @@ dashboard-test-db:
 	docker-compose run --rm php-cli php bin/console --env=test doctrine:database:create --if-not-exists --no-interaction
 
 dashboard-test-schema:
-	docker-compose run --rm php-cli php bin/console --env=test doctrine:schema:create --no-interaction
+	docker-compose run --rm php-cli php bin/console --env=test doctrine:schema:update --force --no-interaction
 
 dashboard-test-fixtures:
 	docker-compose run --rm php-cli php bin/console --env=test doctrine:fixtures:load --no-interaction
