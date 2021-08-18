@@ -32,4 +32,9 @@ class ProjectRepository
     {
         $this->em->persist($project);
     }
+
+    public function remove(Project $project): void
+    {
+        $this->em->remove($project);
+    }
 }
