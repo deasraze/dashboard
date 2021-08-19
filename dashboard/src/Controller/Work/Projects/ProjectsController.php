@@ -39,7 +39,7 @@ class ProjectsController extends AbstractController
 
         $pagination = $fetcher->all(
             $filter,
-            $request->query->get('page', 1),
+            $request->query->getInt('page', 1),
             self::PER_PAGE,
             $request->query->get('sort', 'name'),
             $request->query->get('direction', 'asc')
