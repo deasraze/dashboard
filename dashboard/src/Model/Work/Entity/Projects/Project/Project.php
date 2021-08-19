@@ -146,4 +146,15 @@ class Project
     {
         return $this->departments->toArray();
     }
+
+    public function getDepartment(DepartmentId $id): Department
+    {
+        foreach ($this->departments as $department) {
+            if ($department->getId()->isEqual($id)) {
+                return $department;
+            }
+        }
+
+        throw new \DomainException('Department is not found.');
+    }
 }
