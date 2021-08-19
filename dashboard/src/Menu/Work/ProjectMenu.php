@@ -32,8 +32,8 @@ class ProjectMenu
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link')
             ->setExtra('routes', [
-                'route' => 'work.projects.project.show',
-                'pattern' => '/^work\.projects\.project\.show\..+/',
+                ['route' => 'work.projects.project.show'],
+                ['pattern' => '/^work\.projects\.project\.show\..+/'],
             ]);
 
         if ($this->auth->isGranted('ROLE_WORK_MANAGE_PROJECTS')) {
@@ -45,8 +45,8 @@ class ProjectMenu
                 ->setAttribute('class', 'nav-item')
                 ->setLinkAttribute('class', 'nav-link')
                 ->setExtra('routes', [
-                    'route' => 'work.projects.project.settings',
-                    'pattern' => '/^work\.projects\.project\.settings\..+/',
+                    ['route' => 'work.projects.project.settings'],
+                    ['pattern' => '/^work\.projects\.project\.settings\..+/'],
                 ]);
         }
 
