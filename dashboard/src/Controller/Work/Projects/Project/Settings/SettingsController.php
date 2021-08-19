@@ -19,7 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/work/projects/{project_id}/settings", name="work.projects.project.settings")
+ * @Route("/work/projects/{project_id}/settings",
+ *     name="work.projects.project.settings",
+ *     requirements={"project_id"=Guid::PATTERN}
+ * )
  * @ParamConverter("project", options={"id" = "project_id"})
  * @IsGranted("ROLE_WORK_MANAGE_PROJECTS")
  */
@@ -33,7 +36,7 @@ class SettingsController extends AbstractController
     }
 
     /**
-     * @Route("", name="", requirements={"project_id"=Guid::PATTERN})
+     * @Route("", name="")
      */
     public function show(Project $project): Response
     {
