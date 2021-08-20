@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/work/projects/roles", name="work.projects.roles")
+ * @Route("/work/projects/roles", name="work.projects.roles", requirements={"id"=Guid::PATTERN})
  * @IsGranted("ROLE_WORK_MANAGE_PROJECTS")
  */
 class RolesController extends AbstractController
@@ -70,7 +70,7 @@ class RolesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name=".edit", requirements={"id"=Guid::PATTERN})
+     * @Route("/{id}/edit", name=".edit")
      */
     public function edit(Role $role, Request $request, Edit\Handler $handler): Response
     {
@@ -97,7 +97,7 @@ class RolesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/copy", name=".copy", requirements={"id"=Guid::PATTERN})
+     * @Route("/{id}/copy", name=".copy")
      */
     public function copy(Role $role, Request $request, Copy\Handler $handler): Response
     {
@@ -124,7 +124,7 @@ class RolesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name=".delete", requirements={"id"=Guid::PATTERN})
+     * @Route("/{id}/delete", name=".delete")
      */
     public function delete(Role $role, Request $request, Remove\Handler $handler): Response
     {
@@ -145,7 +145,7 @@ class RolesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name=".show", requirements={"id"=Guid::PATTERN})
+     * @Route("/{id}", name=".show")
      */
     public function show(Role $role): Response
     {
