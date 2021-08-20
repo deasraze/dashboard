@@ -28,6 +28,15 @@ class RoleRepository
         return $role;
     }
 
+    public function hasByName(string $name): bool
+    {
+        return $this->repo->createQueryBuilder('t')
+            ->select('COUNT(t.name)')
+            ->where('t.name = :name')
+            ->setParameter(':name', $name)
+            ->getQuery()->getSingleScalarResult() > 0;
+    }
+
     public function add(Role $role): void
     {
         $this->em->persist($role);
