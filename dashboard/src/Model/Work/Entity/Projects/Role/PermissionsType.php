@@ -20,7 +20,7 @@ class PermissionsType extends JsonType
             $data = $value;
         }
 
-        parent::convertToDatabaseValue($data, $platform);
+        return parent::convertToDatabaseValue($data, $platform);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
