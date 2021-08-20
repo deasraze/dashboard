@@ -20,7 +20,8 @@ class Form extends AbstractType
                 'choices' => \array_combine(Permission::names(), Permission::names()),
                 'required' => false,
                 'expanded' => true,
-                'multiple' => true
+                'multiple' => true,
+                'translation_domain' => 'work_permissions'
             ]);
     }
 

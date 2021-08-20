@@ -21,6 +21,7 @@ class Form extends AbstractType
                 'required' => false,
                 'expanded' => true,
                 'multiple' => true,
+                'translation_domain' => 'work_permissions'
             ]);
     }
 
