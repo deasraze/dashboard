@@ -21,7 +21,8 @@ class RoleFetcher
             ->select(
                 'r.id',
                 'r.name',
-                'r.permissions'
+                'r.permissions',
+                '(SELECT COUNT(*) FROM work_projects_project_membership_roles AS mr WHERE mr.role_id = r.id) AS members_count'
             )
             ->from('work_projects_roles', 'r')
             ->orderBy('name')
