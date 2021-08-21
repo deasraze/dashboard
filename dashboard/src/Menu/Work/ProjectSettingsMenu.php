@@ -48,6 +48,18 @@ class ProjectSettingsMenu
                     ['route' => 'work.projects.project.settings.departments'],
                     ['pattern' => '/^work\.projects\.project\.settings\.departments\..+/'],
                 ]);
+
+            $menu
+                ->addChild('Members', [
+                    'route' => 'work.projects.project.settings.members',
+                    'routeParameters' => ['project_id' => $options['project_id']]
+                ])
+                ->setAttribute('class', 'nav-item')
+                ->setLinkAttribute('class', 'nav-link')
+                ->setExtra('routes', [
+                    ['route' => 'work.projects.project.settings.members'],
+                    ['pattern' => '/^work\.projects\.project\.settings\.members\..+/'],
+                ]);
         }
 
         return $menu;
