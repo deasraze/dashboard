@@ -15,6 +15,20 @@ class DepartmentFetcher
         $this->connection = $connection;
     }
 
+    public function listOfProject(string $project): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                'id',
+                'name'
+            )
+            ->from('work_projects_project_departments')
+            ->where('project_id = :project')
+            ->setParameter(':project', $project)
+            ->orderBy('name')
+            ->execute()->fetchAllKeyValue();
+    }
+
     public function allOfProject(string $project): array
     {
         return $this->connection->createQueryBuilder()

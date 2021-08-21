@@ -34,4 +34,16 @@ class RoleFetcher
             ]);
         }, $stmt->fetchAllAssociative());
     }
+
+    public function allList(): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                'id',
+                'name'
+            )
+            ->from('work_projects_roles')
+            ->orderBy('name')
+            ->execute()->fetchAllKeyValue();
+    }
 }
