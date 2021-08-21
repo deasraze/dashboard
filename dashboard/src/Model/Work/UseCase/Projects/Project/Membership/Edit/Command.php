@@ -41,7 +41,7 @@ class Command
 
         $command->departments = \array_map(static function (Department $department): string {
             return $department->getId()->getValue();
-        }, $project->getDepartments());
+        }, $membership->getDepartments());
         $command->roles = \array_map(static function (Role $role): string {
             return $role->getId()->getValue();
         }, $membership->getRoles());
