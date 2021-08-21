@@ -47,7 +47,7 @@ class MembersController extends AbstractController
     }
 
     /**
-     * @Route("/assing", name=".assign")
+     * @Route("/assign", name=".assign")
      */
     public function assign(Project $project, Add\Handler $handler, Request $request): Response
     {
