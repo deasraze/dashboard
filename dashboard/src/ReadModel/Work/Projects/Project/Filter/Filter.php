@@ -12,7 +12,7 @@ class Filter
     public ?string $name = null;
     public ?string $status = Status::ACTIVE;
 
-    public function __construct(?string $member)
+    private function __construct(?string $member)
     {
         $this->member = $member;
     }
