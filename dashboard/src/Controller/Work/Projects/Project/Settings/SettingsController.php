@@ -10,8 +10,8 @@ use App\Model\Work\UseCase\Projects\Project\Archive;
 use App\Model\Work\UseCase\Projects\Project\Edit;
 use App\Model\Work\UseCase\Projects\Project\Reinstate;
 use App\Model\Work\UseCase\Projects\Project\Remove;
+use App\Security\Voter\Work\Projects\ProjectAccess;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *     requirements={"project_id"=Guid::PATTERN}
  * )
  * @ParamConverter("project", options={"id" = "project_id"})
- * @IsGranted("ROLE_WORK_MANAGE_PROJECTS")
  */
 class SettingsController extends AbstractController
 {
@@ -40,6 +39,8 @@ class SettingsController extends AbstractController
      */
     public function show(Project $project): Response
     {
+        $this->denyAccessUnlessGranted(ProjectAccess::EDIT, $project);
+
         return $this->render('app/work/projects/project/settings/show.html.twig', compact('project'));
     }
 
@@ -48,6 +49,8 @@ class SettingsController extends AbstractController
      */
     public function edit(Project $project, Request $request, Edit\Handler $handler): Response
     {
+        $this->denyAccessUnlessGranted(ProjectAccess::EDIT, $project);
+
         $command = Edit\Command::fromProject($project);
 
         $form = $this->createForm(Edit\Form::class, $command);
@@ -75,6 +78,8 @@ class SettingsController extends AbstractController
      */
     public function archive(Project $project, Request $request, Archive\Handler $handler): Response
     {
+        $this->denyAccessUnlessGranted(ProjectAccess::EDIT, $project);
+
         if (!$this->isCsrfTokenValid('archive', $request->request->get('token'))) {
             return $this->redirectToRoute('work.projects.project.show', ['id' => $project->getId()]);
         }
@@ -96,6 +101,8 @@ class SettingsController extends AbstractController
      */
     public function reinstate(Project $project, Request $request, Reinstate\Handler $handler): Response
     {
+        $this->denyAccessUnlessGranted(ProjectAccess::EDIT, $project);
+
         if (!$this->isCsrfTokenValid('reinstate', $request->request->get('token'))) {
             return $this->redirectToRoute('work.projects.project.show', ['id' => $project->getId()]);
         }
@@ -117,6 +124,8 @@ class SettingsController extends AbstractController
      */
     public function delete(Project $project, Request $request, Remove\Handler $handler): Response
     {
+        $this->denyAccessUnlessGranted(ProjectAccess::EDIT, $project);
+
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
             return $this->redirectToRoute('work.projects.project.show', ['id' => $project->getId()]);
         }
