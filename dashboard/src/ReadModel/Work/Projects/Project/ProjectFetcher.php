@@ -38,6 +38,14 @@ class ProjectFetcher
             )
             ->from('work_projects_projects', 'p');
 
+        if (null !== $filter->member) {
+            $qb->andWhere('EXISTS (
+                SELECT ms.member_id FROM work_projects_project_memberships AS ms 
+                WHERE ms.member_id = :member AND ms.project_id = p.id
+            )');
+            $qb->setParameter(':member', $filter->member);
+        }
+
         if (null !== $filter->name) {
             $qb->andWhere($qb->expr()->like('LOWER(p.name)', ':name'));
             $qb->setParameter(':name', '%' . \mb_strtolower($filter->name) . '%');
