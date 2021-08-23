@@ -39,5 +39,6 @@ class CreateTest extends TestCase
         self::assertEquals($priority, $task->getPriority());
         self::assertEquals($name, $task->getName());
         self::assertEquals($content, $task->getContent());
+        self::assertEquals(0, $task->getProgress());
     }
 }
