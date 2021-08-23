@@ -13,6 +13,7 @@ class Task
     private Project $project;
     private Member $author;
     private \DateTimeImmutable $date;
+    private ?\DateTimeImmutable $planDate = null;
     private string $name;
     private ?string $content;
     private Type $type;
@@ -46,6 +47,11 @@ class Task
         $this->content = $content;
     }
 
+    public function plan(?\DateTimeImmutable $date): void
+    {
+        $this->planDate = $date;
+    }
+
     public function getId(): Id
     {
         return $this->id;
@@ -64,6 +70,11 @@ class Task
     public function getDate(): \DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function getPlanDate(): ?\DateTimeImmutable
+    {
+        return $this->planDate;
     }
 
     public function getName(): string
