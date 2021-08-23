@@ -39,7 +39,8 @@ class MemberFetcher
                 'TRIM(CONCAT(m.name_first, \' \', m.name_last)) AS name',
                 'm.email',
                 'g.name AS group',
-                'm.status'
+                'm.status',
+                '(SELECT COUNT(ms.id) FROM work_projects_project_memberships ms WHERE ms.member_id = m.id) AS memberships_count'
             )
             ->from('work_members_members', 'm')
             ->innerJoin('m', 'work_members_groups', 'g', 'm.group_id = g.id');
@@ -64,7 +65,7 @@ class MemberFetcher
             $qb->setParameter(':status', $filter->status);
         }
 
-        if (!\in_array($sort, ['name', 'email', 'group', 'status'], true)) {
+        if (!\in_array($sort, ['name', 'email', 'group', 'memberships_count', 'status'], true)) {
             throw new \UnexpectedValueException('Cannot sort by ' . $sort);
         }
 
