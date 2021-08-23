@@ -27,7 +27,7 @@ class ProjectAccess extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        return (\in_array($attribute, [self::VIEW, self::EDIT, self::MANAGE_MEMBERS]) && $subject instanceof Project);
+        return (\in_array($attribute, [self::VIEW, self::EDIT, self::MANAGE_MEMBERS], true) && $subject instanceof Project);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
