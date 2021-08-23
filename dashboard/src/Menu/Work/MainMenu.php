@@ -8,7 +8,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class ProjectMenu
+class MainMenu
 {
     private FactoryInterface $factory;
     private AuthorizationCheckerInterface $auth;
@@ -19,34 +19,28 @@ class ProjectMenu
         $this->auth = $auth;
     }
 
-    public function build(array $options): ItemInterface
+    public function build(): ItemInterface
     {
         $menu = $this->factory->createItem('root')
             ->setChildrenAttribute('class', 'nav nav-tabs mb-4');
 
         $menu
-            ->addChild('Dashboard', [
-                'route' => 'work.projects.project.show',
-                'routeParameters' => ['id' => $options['project_id']]
-            ])
+            ->addChild('Projects', ['route' => 'work.projects'])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link')
             ->setExtra('routes', [
-                ['route' => 'work.projects.project.show'],
-                ['pattern' => '/^work\.projects\.project\.show\..+/'],
+                ['route' => 'work.projects'],
+                ['route' => 'work.projects.create']
             ]);
 
         if ($this->auth->isGranted('ROLE_WORK_MANAGE_PROJECTS')) {
             $menu
-                ->addChild('Settings', [
-                    'route' => 'work.projects.project.settings',
-                    'routeParameters' => ['project_id' => $options['project_id']]
-                ])
+                ->addChild('Roles', ['route' => 'work.projects.roles'])
                 ->setAttribute('class', 'nav-item')
                 ->setLinkAttribute('class', 'nav-link')
                 ->setExtra('routes', [
-                    ['route' => 'work.projects.project.settings'],
-                    ['pattern' => '/^work\.projects\.project\.settings\..+/'],
+                    ['route' => 'work.projects.roles'],
+                    ['pattern' => '/^work\.projects\.roles\..+/']
                 ]);
         }
 
