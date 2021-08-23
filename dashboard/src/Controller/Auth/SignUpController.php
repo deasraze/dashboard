@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Auth;
 
+use App\Controller\ErrorHandler;
 use App\Model\User\UseCase\SignUp;
 use App\ReadModel\User\UserFetcher;
 use App\Security\LoginFormAuthenticator;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +18,12 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class SignUpController extends AbstractController
 {
     private UserFetcher $users;
-    private LoggerInterface $logger;
+    private ErrorHandler $errors;
 
-    public function __construct(UserFetcher $users, LoggerInterface $logger)
+    public function __construct(UserFetcher $users, ErrorHandler $errors)
     {
         $this->users = $users;
-        $this->logger = $logger;
+        $this->errors = $errors;
     }
 
     /**
@@ -43,7 +43,7 @@ class SignUpController extends AbstractController
 
                 return $this->redirectToRoute('app_login');
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -81,7 +81,7 @@ class SignUpController extends AbstractController
                 $request
             );
         } catch (\DomainException $e) {
-            $this->logger->warning($e->getMessage(), ['exception' => $e]);
+            $this->errors->handle($e);
             $this->addFlash('error', $e->getMessage());
 
             return $this->redirectToRoute('auth.signup');

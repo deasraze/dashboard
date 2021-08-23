@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Auth;
 
+use App\Controller\ErrorHandler;
 use App\Model\User\UseCase\Reset;
 use App\ReadModel\User\UserFetcher;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ResetController extends AbstractController
 {
-    private LoggerInterface $logger;
+    private ErrorHandler $errors;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(ErrorHandler $errors)
     {
-        $this->logger = $logger;
+        $this->errors = $errors;
     }
 
     /**
@@ -38,7 +38,7 @@ class ResetController extends AbstractController
 
                 return $this->redirectToRoute('home');
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -71,7 +71,7 @@ class ResetController extends AbstractController
 
                 return $this->redirectToRoute('home');
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }

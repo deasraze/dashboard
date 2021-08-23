@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Profile\OAuth;
 
+use App\Controller\ErrorHandler;
 use App\Model\User\UseCase\Network;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,11 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GithubController extends AbstractController
 {
-    private LoggerInterface $logger;
+    private ErrorHandler $errors;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(ErrorHandler $errors)
     {
-        $this->logger = $logger;
+        $this->errors = $errors;
     }
 
     /**
@@ -52,7 +52,7 @@ class GithubController extends AbstractController
             $handler->handle($command);
             $this->addFlash('success', 'GitHub is successfully attached.');
         } catch (\DomainException $e) {
-            $this->logger->warning($e->getMessage(), ['exception' => $e]);
+            $this->errors->handle($e);
             $this->addFlash('error', $e->getMessage());
         }
 

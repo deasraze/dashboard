@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Work\Projects;
 
 use App\Annotation\Guid;
+use App\Controller\ErrorHandler;
 use App\Model\Work\Entity\Projects\Role\Permission;
 use App\Model\Work\Entity\Projects\Role\Role;
 use App\Model\Work\UseCase\Projects\Role\Copy;
@@ -12,7 +13,6 @@ use App\Model\Work\UseCase\Projects\Role\Create;
 use App\Model\Work\UseCase\Projects\Role\Edit;
 use App\Model\Work\UseCase\Projects\Role\Remove;
 use App\ReadModel\Work\Projects\RoleFetcher;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,11 +25,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RolesController extends AbstractController
 {
-    private LoggerInterface $logger;
+    private ErrorHandler $errors;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(ErrorHandler $errors)
     {
-        $this->logger = $logger;
+        $this->errors = $errors;
     }
 
     /**
@@ -59,7 +59,7 @@ class RolesController extends AbstractController
 
                 return $this->redirectToRoute('work.projects.roles');
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -85,7 +85,7 @@ class RolesController extends AbstractController
 
                 return $this->redirectToRoute('work.projects.roles.show', ['id' => $role->getId()]);
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -112,7 +112,7 @@ class RolesController extends AbstractController
 
                 return $this->redirectToRoute('work.projects.roles');
             } catch (\DomainException $e) {
-                $this->logger->warning($e->getMessage(), ['exception' => $e]);
+                $this->errors->handle($e);
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -137,7 +137,7 @@ class RolesController extends AbstractController
         try {
             $handler->handle($command);
         } catch (\DomainException $e) {
-            $this->logger->warning($e->getMessage(), ['exception' => $e]);
+            $this->errors->handle($e);
             $this->addFlash('error', $e->getMessage());
         }
 
