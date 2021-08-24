@@ -58,7 +58,6 @@ class Task
                     throw new \DomainException('Cyclomatic children.');
                 }
             } while (null !== $current = $current->getParent());
-
         }
 
         $this->parent = $parent;
@@ -67,6 +66,15 @@ class Task
     public function plan(?\DateTimeImmutable $date): void
     {
         $this->planDate = $date;
+    }
+
+    public function move(Project $project): void
+    {
+        if ($this->project === $project) {
+            throw new \DomainException('Project is already same.');
+        }
+
+        $this->project = $project;
     }
 
     public function getId(): Id
