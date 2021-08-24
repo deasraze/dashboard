@@ -125,6 +125,10 @@ class Task
         }
 
         $this->status = $status;
+
+        if ($status->isDone() && $this->progress !== 100) {
+            $this->changeProgress(100);
+        }
     }
 
     public function assignExecutor(Member $executor): void
