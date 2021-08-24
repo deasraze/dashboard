@@ -6,6 +6,7 @@ namespace App\Model\Work\Entity\Projects\Task;
 
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Project\Project;
+use Webmozart\Assert\Assert;
 
 class Task
 {
@@ -86,6 +87,17 @@ class Task
         }
 
         $this->type = $type;
+    }
+
+    public function changeProgress(int $progress): void
+    {
+        Assert::range($progress, 0, 100);
+
+        if ($this->progress === $progress) {
+            throw new \DomainException('Progress is already same.');
+        }
+
+        $this->progress = $progress;
     }
 
     public function changeStatus(Status $status): void
