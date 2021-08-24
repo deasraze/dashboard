@@ -17,6 +17,8 @@ class Task
     private Member $author;
     private \DateTimeImmutable $date;
     private ?\DateTimeImmutable $planDate = null;
+    private ?\DateTimeImmutable $startDate = null;
+    private ?\DateTimeImmutable $endDate = null;
     private string $name;
     private ?string $content;
     private Type $type;
@@ -118,7 +120,7 @@ class Task
         $this->priority = $priority;
     }
 
-    public function changeStatus(Status $status): void
+    public function changeStatus(Status $status, \DateTimeImmutable $date): void
     {
         if ($this->status->isEqual($status)) {
             throw new \DomainException('Status is already same.');
@@ -126,8 +128,18 @@ class Task
 
         $this->status = $status;
 
-        if ($status->isDone() && $this->progress !== 100) {
-            $this->changeProgress(100);
+        if (!$status->isNew() && null === $this->startDate) {
+            $this->startDate = $date;
+        }
+
+        if ($status->isDone()) {
+            if ($this->progress !== 100) {
+                $this->changeProgress(100);
+            }
+
+            $this->endDate = $date;
+        } else {
+            $this->endDate = null;
         }
     }
 
@@ -192,6 +204,16 @@ class Task
     public function getPlanDate(): ?\DateTimeImmutable
     {
         return $this->planDate;
+    }
+
+    public function getStartDate(): ?\DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function getEndDate(): ?\DateTimeImmutable
+    {
+        return $this->endDate;
     }
 
     public function getName(): string

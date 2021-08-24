@@ -20,9 +20,12 @@ class ChangeStatusTest extends TestCase
         $project = (new ProjectBuilder())->build();
         $task = (new TaskBuilder())->build($project, $member);
 
-        $task->changeStatus($status = Status::working());
+        $task->changeStatus($status = Status::working(), $date = new \DateTimeImmutable());
 
         self::assertEquals($status, $task->getStatus());
+
+        self::assertEquals($date, $task->getStartDate());
+        self::assertNull($task->getEndDate());
     }
 
     public function testAlready(): void
@@ -32,22 +35,96 @@ class ChangeStatusTest extends TestCase
         $project = (new ProjectBuilder())->build();
         $task = (new TaskBuilder())->build($project, $member);
 
-        $task->changeStatus($status = Status::working());
+        $task->changeStatus($status = Status::working(), $date = new \DateTimeImmutable());
 
         $this->expectExceptionMessage('Status is already same.');
-        $task->changeStatus($status);
+        $task->changeStatus($status, $date);
     }
 
-    public function testDoneProgress()
+    public function testDoneProgress(): void
     {
         $group = (new GroupBuilder())->build();
         $member = (new MemberBuilder())->build($group);
         $project = (new ProjectBuilder())->build();
         $task = (new TaskBuilder())->build($project, $member);
 
-        $task->changeStatus($status = new Status(Status::DONE));
+        $task->changeStatus($status = new Status(Status::DONE), new \DateTimeImmutable());
 
         self::assertEquals($status, $task->getStatus());
         self::assertEquals(100, $task->getProgress());
+    }
+
+    public function testStartDate(): void
+    {
+        $group = (new GroupBuilder())->build();
+        $member = (new MemberBuilder())->build($group);
+        $project = (new ProjectBuilder())->build();
+        $task = (new TaskBuilder())->build($project, $member);
+
+        $task->changeStatus(
+            Status::working(),
+            $date = new \DateTimeImmutable('+1 day')
+        );
+
+        self::assertEquals($date, $task->getStartDate());
+        self::assertNull($task->getEndDate());
+    }
+
+    public function testEndDateWithStartDate(): void
+    {
+        $group = (new GroupBuilder())->build();
+        $member = (new MemberBuilder())->build($group);
+        $project = (new ProjectBuilder())->build();
+        $task = (new TaskBuilder())->build($project, $member);
+
+        $task->changeStatus(
+            Status::working(),
+            $startDate = new \DateTimeImmutable('+1 day')
+        );
+
+        $task->changeStatus(
+            new Status(Status::DONE),
+            $endDate = $startDate->modify('+1 day')
+        );
+
+        self::assertEquals($startDate, $task->getStartDate());
+        self::assertEquals($endDate, $task->getEndDate());
+    }
+
+    public function testEndDateWithoutStartDate(): void
+    {
+        $group = (new GroupBuilder())->build();
+        $member = (new MemberBuilder())->build($group);
+        $project = (new ProjectBuilder())->build();
+        $task = (new TaskBuilder())->build($project, $member);
+
+        $task->changeStatus(
+            new Status(Status::DONE),
+            $endDate = new \DateTimeImmutable('+1 day')
+        );
+
+        self::assertEquals($endDate, $task->getEndDate());
+        self::assertEquals($endDate, $task->getStartDate());
+    }
+
+    public function testEndDateReset(): void
+    {
+        $group = (new GroupBuilder())->build();
+        $member = (new MemberBuilder())->build($group);
+        $project = (new ProjectBuilder())->build();
+        $task = (new TaskBuilder())->build($project, $member);
+
+        $task->changeStatus(
+            new Status(Status::DONE),
+            $endDate = new \DateTimeImmutable('+1 day')
+        );
+
+        $task->changeStatus(
+            Status::working(),
+            $endDate->modify('+1 day')
+        );
+
+        self::assertEquals($endDate, $task->getStartDate());
+        self::assertNull($task->getEndDate());
     }
 }
