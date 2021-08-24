@@ -20,6 +20,7 @@ class Task
     private int $progress;
     private int $priority;
     private ?Task $parent = null;
+    private Status $status;
 
     public function __construct(
         Id $id,
@@ -40,6 +41,7 @@ class Task
         $this->type = $type;
         $this->progress = 0;
         $this->priority = $priority;
+        $this->status = Status::new();
     }
 
     public function edit(string $name, ?string $content): void
@@ -84,6 +86,20 @@ class Task
         }
 
         $this->type = $type;
+    }
+
+    public function changeStatus(Status $status): void
+    {
+        if ($this->status->isEqual($status)) {
+            throw new \DomainException('Status is already same.');
+        }
+
+        $this->status = $status;
+    }
+
+    public function isNew(): bool
+    {
+        return $this->status->isNew();
     }
 
     public function getId(): Id
@@ -139,5 +155,10 @@ class Task
     public function getParent(): ?Task
     {
         return $this->parent;
+    }
+
+    public function getStatus(): Status
+    {
+        return $this->status;
     }
 }
