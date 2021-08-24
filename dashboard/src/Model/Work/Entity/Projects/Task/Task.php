@@ -56,7 +56,7 @@ class Task
 
     public function start(\DateTimeImmutable $date): void
     {
-        if ($this->isWorking()) {
+        if (!$this->isNew()) {
             throw new \DomainException('Task is already started.');
         }
 
