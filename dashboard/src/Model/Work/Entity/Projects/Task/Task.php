@@ -54,6 +54,19 @@ class Task
         $this->executors = new ArrayCollection();
     }
 
+    public function start(\DateTimeImmutable $date): void
+    {
+        if ($this->isWorking()) {
+            throw new \DomainException('Task is already started.');
+        }
+
+        if (0 === $this->executors->count()) {
+            throw new \DomainException('Task does not contain executors.');
+        }
+
+        $this->changeStatus(Status::working(), $date);
+    }
+
     public function edit(string $name, ?string $content): void
     {
         $this->name    = $name;
@@ -179,6 +192,11 @@ class Task
     public function isNew(): bool
     {
         return $this->status->isNew();
+    }
+
+    public function isWorking(): bool
+    {
+        return $this->status->isWorking();
     }
 
     public function getId(): Id
