@@ -38,7 +38,7 @@ class TaskRepository
 
     public function remove(Task $task): void
     {
-        $this->em->remove($this);
+        $this->em->remove($task);
     }
 
     public function nextId(): Id
