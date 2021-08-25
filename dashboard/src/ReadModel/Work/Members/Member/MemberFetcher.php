@@ -114,7 +114,7 @@ class MemberFetcher
             ->innerJoin('msd', 'work_projects_project_departments', 'd', 'd.id = msd.department_id')
             ->where('m.status = :status AND ms.project_id = :project')
             ->setParameter(':status', Status::ACTIVE)
-            ->setParameter(':projects', $project)
+            ->setParameter(':project', $project)
             ->orderBy('d.name')->addOrderBy('name')
             ->execute()->fetchAllAssociative();
     }
