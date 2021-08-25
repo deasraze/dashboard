@@ -64,4 +64,16 @@ class ProjectFetcher
 
         return $this->paginator->paginate($qb, $page, $limit);
     }
+
+    public function allList(): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                'id',
+                'name',
+            )
+            ->from('work_projects_projects')
+            ->orderBy('sort')
+            ->execute()->fetchAllKeyValue();
+    }
 }

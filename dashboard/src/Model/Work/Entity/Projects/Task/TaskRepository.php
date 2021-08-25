@@ -31,6 +31,14 @@ class TaskRepository
         return $task;
     }
 
+    /**
+     * @return Task[]
+     */
+    public function allByParent(Id $id): array
+    {
+        return $this->repo->findBy(['parent' => $id->getValue()]);
+    }
+
     public function add(Task $task): void
     {
         $this->em->persist($task);
