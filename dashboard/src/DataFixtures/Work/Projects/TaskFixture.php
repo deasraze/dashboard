@@ -56,6 +56,7 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
                         Status::WORKING,
                         Status::HELP,
                         Status::CHECKING,
+                        Status::REJECTED,
                         Status::DONE,
                     ])),
                     $date->modify('+' . $faker->numberBetween(1, 2) . 'days')
