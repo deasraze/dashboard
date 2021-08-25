@@ -16,24 +16,45 @@ use Doctrine\Persistence\ObjectManager;
 
 class ProjectFixture extends Fixture implements DependentFixtureInterface
 {
+    public const REFERENCE_FIRST = 'work_project_first';
+    public const REFERENCE_SECOND = 'work_project_second';
+
     public function load(ObjectManager $manager): void
     {
-        /* @var Member $admin */
+        /**
+         * @var Member $admin
+         * @var Member $user
+         */
         $admin = $this->getReference(MemberFixture::REFERENCE_ADMIN);
+        $user = $this->getReference(MemberFixture::REFERENCE_USER);
 
-        /* @var Role $manage */
+        /**
+         * @var Role $manage
+         * @var Role $guest
+         */
         $manage = $this->getReference(RoleFixture::REFERENCE_MANAGER);
+        $guest = $this->getReference(RoleFixture::REFERENCE_GUEST);
 
         $active = $this->createProject('First project', 1);
+
         $active->addDepartment($development = DepartmentId::next(), 'Development');
-        $active->addDepartment(DepartmentId::next(), 'Marketing');
+        $active->addDepartment($marketing = DepartmentId::next(), 'Marketing');
         $active->addMember($admin, [$development], [$manage]);
+        $active->addMember($user, [$marketing], [$guest]);
+
         $manager->persist($active);
+        $this->addReference(self::REFERENCE_FIRST, $active);
 
         $active = $this->createProject('Second project', 2);
+
+        $active->addDepartment($development = DepartmentId::next(), 'Development');
+        $active->addMember($admin, [$development], [$guest]);
+
         $manager->persist($active);
+        $this->addReference(self::REFERENCE_SECOND, $active);
 
         $archived = $this->createArchivedProject('Third project', 3);
+
         $manager->persist($archived);
 
         $manager->flush();
