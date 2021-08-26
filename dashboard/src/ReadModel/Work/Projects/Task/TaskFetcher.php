@@ -80,7 +80,7 @@ class TaskFetcher
 
         if (null !== $filter->executor) {
             $qb->innerJoin('t', 'work_projects_tasks_executors', 'e', 'e.task_id = t.id');
-            $qb->where('e.member_id = :executor');
+            $qb->andWhere('e.member_id = :executor');
             $qb->setParameter(':executor', $filter->executor);
         }
 
@@ -139,7 +139,7 @@ class TaskFetcher
             ->from('work_projects_tasks_executors', 'e')
             ->innerJoin('e', 'work_members_members', 'm', 'm.id = e.member_id')
             ->where('e.task_id IN (:tasks)')
-            ->setParameter('tasks', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':tasks', $ids, Connection::PARAM_INT_ARRAY)
             ->orderBy('name')
             ->execute()->fetchAllAssociative();
     }
