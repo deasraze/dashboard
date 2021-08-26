@@ -160,7 +160,7 @@ class TasksController extends AbstractController
         }
 
         return $this->render('app/work/projects/tasks/assign.html.twig', [
-            'project' => $task->getProject(),
+            'project' => $project,
             'task' => $task,
             'form' => $form->createView(),
         ]);
@@ -266,7 +266,7 @@ class TasksController extends AbstractController
     {
         $this->denyAccessUnlessGranted(TaskAccess::MANAGE, $task);
 
-        $command = new Move\Command($task->getId()->getValue());
+        $command = Move\Command::fromTask($task);
 
         $form = $this->createForm(Move\Form::class, $command);
         $form->handleRequest($request);
@@ -351,7 +351,7 @@ class TasksController extends AbstractController
             return $this->redirectToRoute('work.projects.tasks.show', ['id' => $task->getId()]);
         }
 
-        $this->denyAccessUnlessGranted(TaskAccess::MANAGE, $task);
+        $this->denyAccessUnlessGranted(TaskAccess::DELETE, $task);
 
         $command = new Remove\Command($task->getId()->getValue());
 
@@ -381,7 +381,7 @@ class TasksController extends AbstractController
         $this->denyAccessUnlessGranted(TaskAccess::VIEW, $task);
 
         if (!$member = $members->find($this->getUser()->getId())) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $statusCommand = Status\Command::fromTask($task);
