@@ -21,8 +21,8 @@ class Command
      * @Assert\NotBlank()
      */
     public string $name;
-    public ?string $content;
-    public ?int $parent;
+    public ?string $content = null;
+    public ?int $parent = null;
     /**
      * @Assert\Date()
      */
