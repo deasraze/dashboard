@@ -36,6 +36,18 @@ class ProjectMenu
                 ['pattern' => '/^work\.projects\.project\.show\..+/'],
             ]);
 
+        $menu
+            ->addChild('Tasks', [
+                'route' => 'work.projects.project.tasks',
+                'routeParameters' => ['project_id' => $options['project_id']]
+            ])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link')
+            ->setExtra('routes', [
+                ['route' => 'work.projects.project.tasks'],
+                ['pattern' => '/^work\.projects\.project\.tasks\..+/'],
+            ]);
+
         if ($this->auth->isGranted('ROLE_WORK_MANAGE_PROJECTS')) {
             $menu
                 ->addChild('Settings', [
