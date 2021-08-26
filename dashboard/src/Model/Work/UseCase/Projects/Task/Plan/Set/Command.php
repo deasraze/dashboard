@@ -14,7 +14,7 @@ class Command
      */
     public int $id;
     /**
-     * @Assert\Date()
+     * @Assert\NotBlank()
      */
     public \DateTimeImmutable $date;
 
