@@ -107,7 +107,7 @@ class TasksController extends AbstractController
     /**
      * @Route("/{id}/child", name=".child")
      */
-    public function setChildOf(Task $task, Request $request, ChildOf\Handler $handler): Response
+    public function childOf(Task $task, Request $request, ChildOf\Handler $handler): Response
     {
         $this->denyAccessUnlessGranted(TaskAccess::MANAGE, $task);
 
