@@ -20,9 +20,12 @@ class HomeTest extends WebTestCase
     public function testUser(): void
     {
         $client = static::createClient();
-        $provider = static::getContainer()->get(UserProviderInterface::class);
 
-        $client->loginUser($provider->loadUserByIdentifier('auth-user@app.test'));
+        $user = static::getContainer()
+            ->get(UserProviderInterface::class)
+            ->loadUserByIdentifier(AuthFixture::userIdentifier());
+
+        $client->loginUser($user);
 
         $client->request('GET', '/');
         $this->assertResponseIsSuccessful();
@@ -32,9 +35,12 @@ class HomeTest extends WebTestCase
     public function testAdmin(): void
     {
         $client = static::createClient();
-        $provider = static::getContainer()->get(UserProviderInterface::class);
 
-        $client->loginUser($provider->loadUserByIdentifier('auth-admin@app.test'));
+        $admin = static::getContainer()
+            ->get(UserProviderInterface::class)
+            ->loadUserByIdentifier(AuthFixture::adminIdentifier());
+
+        $client->loginUser($admin);
 
         $client->request('GET', '/');
         $this->assertResponseIsSuccessful();

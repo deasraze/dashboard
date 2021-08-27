@@ -23,6 +23,16 @@ class AuthFixture extends Fixture
         $this->hasher = $hasher;
     }
 
+    public static function userIdentifier(): string
+    {
+        return 'auth-user@app.test';
+    }
+
+    public static function adminIdentifier(): string
+    {
+        return 'auth-admin@app.test';
+    }
+
     public function load(ObjectManager $manager): void
     {
         $hash = $this->hasher->hashing('password');
