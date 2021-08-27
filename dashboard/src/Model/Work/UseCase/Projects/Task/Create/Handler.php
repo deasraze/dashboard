@@ -34,6 +34,8 @@ class Handler
         $project = $this->projects->get(new ProjectId($command->project));
         $member = $this->members->get(new MemberId($command->member));
 
+        $parent = $command->parent ? $this->tasks->get(new Id($command->parent)) : null;
+
         $date = new \DateTimeImmutable();
 
         foreach ($command->names as $name) {
@@ -48,8 +50,7 @@ class Handler
                 $command->content
             );
 
-            if (null !== $command->parent) {
-                $parent = $this->tasks->get(new Id($command->parent));
+            if (null !== $parent) {
                 $task->setChildOf($parent);
             }
 
