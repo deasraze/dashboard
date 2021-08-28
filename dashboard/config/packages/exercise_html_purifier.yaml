@@ -6,6 +6,7 @@ exercise_html_purifier:
             config:
                 # the charset used by the original contents
                 Core.Encoding: 'UTF-8'
+                AutoFormat.Linkify: true
                 # full configuration reference: http://htmlpurifier.org/live/configdoc/plain.html
 
 # Read the https://github.com/Exercise/HTMLPurifierBundle/blob/master/README.md file
