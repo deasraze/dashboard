@@ -58,3 +58,8 @@ services:
     App\Menu\Work\Projects\TaskPresetMenu:
         tags:
             - { name: knp_menu.menu_builder, method: build, alias: work_projects_task_presets }
+
+    App\Twig\Extension\Work\Processor\Driver\:
+        resource: '../src/Twig/Extension/Work/Processor/Driver/*Driver.php'
+        tags:
+            - 'app.twig.work_processor.driver'

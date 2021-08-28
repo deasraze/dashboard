@@ -4,20 +4,30 @@ declare(strict_types=1);
 
 namespace App\ReadModel\Work\Projects\Task;
 
+use App\Model\Work\Entity\Projects\Task\Task;
 use App\ReadModel\Work\Projects\Task\Filter\Filter;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 class TaskFetcher
 {
     private Connection $connection;
+    private EntityRepository $repository;
     private PaginatorInterface $paginator;
 
-    public function __construct(Connection $connection, PaginatorInterface $paginator)
+    public function __construct(Connection $connection, EntityManagerInterface $em, PaginatorInterface $paginator)
     {
         $this->connection = $connection;
+        $this->repository = $em->getRepository(Task::class);
         $this->paginator = $paginator;
+    }
+
+    public function find(string $id): ?Task
+    {
+        return $this->repository->find($id);
     }
 
     public function all(Filter $filter, int $page, int $limit, string $sort, string $direction): PaginationInterface
