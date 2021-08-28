@@ -106,6 +106,21 @@
     "erusev/parsedown": {
         "version": "1.7.4"
     },
+    "exercise/htmlpurifier-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "99590c5352b58fadacd5535337589aba7e44f5a7"
+        },
+        "files": [
+            "config/packages/exercise_html_purifier.yaml"
+        ]
+    },
+    "ezyang/htmlpurifier": {
+        "version": "v4.13.0"
+    },
     "fakerphp/faker": {
         "version": "v1.15.0"
     },

@@ -208,7 +208,7 @@
             {% if task.content %}
                 <div class="card">
                     <div class="card-body pb-0">
-                        {{ task.content|markdown_to_html }}
+                        {{ task.content|markdown_to_html|purify }}
                     </div>
                 </div>
             {% endif %}
