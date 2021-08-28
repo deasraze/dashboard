@@ -103,6 +103,9 @@
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "erusev/parsedown": {
+        "version": "1.7.4"
+    },
     "fakerphp/faker": {
         "version": "v1.15.0"
     },
@@ -708,6 +711,9 @@
         "version": "1.2.0"
     },
     "twig/extra-bundle": {
+        "version": "v3.3.1"
+    },
+    "twig/markdown-extra": {
         "version": "v3.3.1"
     },
     "twig/twig": {
