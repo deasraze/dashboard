@@ -109,7 +109,14 @@ class TaskFetcher
             $qb->setParameter(':executor', $filter->executor);
         }
 
-        $qb->orderBy($sort ?: 't.id', $direction === 'desc' ? 'desc' : 'asc');
+        if (null === $sort) {
+            $sort = 't.id';
+            $direction = $direction ?: 'desc';
+        } else {
+            $direction = $direction ?: 'asc';
+        }
+
+        $qb->orderBy($sort, $direction);
 
         $pagination = $this->paginator->paginate($qb, $page, $limit);
 
