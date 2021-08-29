@@ -9,7 +9,7 @@ class Filter
     public ?string $project;
     public ?string $member = null;
     public ?string $author = null;
-    public ?string $name = null;
+    public ?string $text = null;
     public ?string $type = null;
     public ?string $status = null;
     public ?int $priority = null;
