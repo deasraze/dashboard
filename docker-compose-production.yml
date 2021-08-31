@@ -18,6 +18,9 @@ services:
       REDIS_URL: tcp://redis:6379?password=${DASHBOARD_REDIS_PASSWORD}
       MAILER_DSN: smtp://localhost
       OAUTH_GITHUB_SECRET: ${DASHBOARD_OAUTH_GITHUB_SECRET}
+      STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
+      STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
+      STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
     depends_on:
       - postgres
       - redis
@@ -31,6 +34,9 @@ services:
       REDIS_URL: tcp://redis:6379?password=${DASHBOARD_REDIS_PASSWORD}
       MAILER_DSN: smtp://localhost
       OAUTH_GITHUB_SECRET: ${DASHBOARD_OAUTH_GITHUB_SECRET}
+      STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
+      STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
+      STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
     depends_on:
       - postgres
       - redis
