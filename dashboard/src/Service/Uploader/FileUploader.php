@@ -25,8 +25,12 @@ class FileUploader
         $name = Uuid::uuid4()->toString().'.'.$file->getClientOriginalExtension();
 
         $stream = \fopen($file->getRealPath(), 'r+b');
-        $this->storage->writeStream($path.'/'.$name, $stream);
-        \fclose($stream);
+
+        try {
+            $this->storage->writeStream($path.'/'.$name, $stream);
+        } finally {
+            \fclose($stream);
+        }
 
         return new File($path, $name, $file->getSize());
     }
