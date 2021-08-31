@@ -18,8 +18,6 @@ class Command
     public string $member;
     /**
      * @var File[]
-     * @Assert\NotBlank()
-     * @Assert\Valid()
      */
     public array $files;
 
