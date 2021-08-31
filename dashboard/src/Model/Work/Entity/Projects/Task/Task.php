@@ -7,6 +7,9 @@ namespace App\Model\Work\Entity\Projects\Task;
 use App\Model\Work\Entity\Members\Member\Id as MemberId;
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Project\Project;
+use App\Model\Work\Entity\Projects\Task\File\File;
+use App\Model\Work\Entity\Projects\Task\File\Id as FileId;
+use App\Model\Work\Entity\Projects\Task\File\Info;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
@@ -61,6 +64,12 @@ class Task
      */
     private ?string $content;
     /**
+     * @var ArrayCollection|File[]
+     * @ORM\OneToMany(targetEntity="App\Model\Work\Entity\Projects\Task\File\File", mappedBy="task", orphanRemoval=true, cascade={"all"})
+     * @ORM\OrderBy({"date" = "ASC"})
+     */
+    private $files;
+    /**
      * @ORM\Column(type="work_projects_task_type", length=16)
      */
     private Type $type;
@@ -108,6 +117,7 @@ class Task
         $this->date = $date;
         $this->name = $name;
         $this->content = $content;
+        $this->files = new ArrayCollection();
         $this->type = $type;
         $this->progress = 0;
         $this->priority = $priority;
@@ -130,8 +140,26 @@ class Task
 
     public function edit(string $name, ?string $content): void
     {
-        $this->name    = $name;
+        $this->name = $name;
         $this->content = $content;
+    }
+
+    public function addFile(FileId $id, Member $member, \DateTimeImmutable $date, Info $info): void
+    {
+        $this->files->add(new File($id, $this, $member, $date, $info));
+    }
+
+    public function removeFile(FileId $id): void
+    {
+        foreach ($this->files as $current) {
+            if ($current->getId()->isEqual($id)) {
+                $this->files->removeElement($current);
+
+                return;
+            }
+        }
+
+        throw new \DomainException('File is not found.');
     }
 
     public function setChildOf(?Task $parent): void
@@ -207,7 +235,7 @@ class Task
         }
 
         if ($status->isDone()) {
-            if ($this->progress !== 100) {
+            if (100 !== $this->progress) {
                 $this->changeProgress(100);
             }
 
@@ -303,6 +331,14 @@ class Task
     public function getContent(): ?string
     {
         return $this->content;
+    }
+
+    /**
+     * @return File[]
+     */
+    public function getFiles(): array
+    {
+        return $this->files->toArray();
     }
 
     public function getType(): Type
