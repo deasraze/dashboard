@@ -7,6 +7,7 @@ flysystem:
                 host: '%env(STORAGE_FTP_HOST)%'
                 username: '%env(STORAGE_FTP_USERNAME)%'
                 password: '%env(STORAGE_FTP_PASSWORD)%'
+                root: '/'
                 port: 21
                 passive: false
                 ssl: false
