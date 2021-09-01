@@ -79,6 +79,14 @@ class Form extends AbstractType
                 'required' => false,
                 'placeholder' => 'All executors',
                 'attr' => ['onchange' => 'this.form.submit()'],
+            ])
+            ->add('roots', Type\ChoiceType::class, [
+                'choices' => [
+                    'Roots' => Status::NEW,
+                ],
+                'required' => false,
+                'placeholder' => 'All levels',
+                'attr' => ['onchange' => 'this.form.submit()'],
             ]);
     }
 

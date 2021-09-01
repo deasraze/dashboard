@@ -14,6 +14,7 @@ class Filter
     public ?string $status = null;
     public ?int $priority = null;
     public ?string $executor = null;
+    public ?string $roots = null;
 
     private function __construct(?string $project)
     {

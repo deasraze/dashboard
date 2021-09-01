@@ -33,7 +33,7 @@ class TaskFetcher
     public function all(Filter $filter, int $page, int $limit, ?string $sort, ?string $direction): PaginationInterface
     {
         if (!\in_array($sort, [null, 't.id', 't.date', 'author_name', 'project_name', 'name', 't.type', 't.plan_date', 't.progress', 't.priority', 't.status'], true)) {
-            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
+            throw new \UnexpectedValueException('Cannot sort by '.$sort);
         }
 
         $qb = $this->connection->createQueryBuilder()
@@ -80,7 +80,7 @@ class TaskFetcher
                 "$vector @@ $query",
                 $qb->expr()->like('LOWER(CONCAT(t.name, \' \', coalesce(t.content, \'\')))', ':text'),
             ));
-            $qb->setParameter(':text', '%' . \mb_strtolower($filter->text) . '%');
+            $qb->setParameter(':text', '%'.\mb_strtolower($filter->text).'%');
 
             if (null === $sort) {
                 $sort = "ts_rank($vector, $query)";
@@ -107,6 +107,10 @@ class TaskFetcher
             $qb->innerJoin('t', 'work_projects_tasks_executors', 'e', 'e.task_id = t.id');
             $qb->andWhere('e.member_id = :executor');
             $qb->setParameter(':executor', $filter->executor);
+        }
+
+        if (null !== $filter->roots) {
+            $qb->andWhere('t.parent_id IS NULL');
         }
 
         if (null === $sort) {
@@ -178,7 +182,7 @@ class TaskFetcher
             return \array_merge($task, [
                 'executors' => \array_filter($executors, static function (array $executor) use ($task): bool {
                     return $executor['task_id'] === $task['id'];
-                })
+                }),
             ]);
         }, $tasks);
     }
