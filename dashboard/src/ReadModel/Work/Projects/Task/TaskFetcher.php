@@ -180,6 +180,26 @@ class TaskFetcher
             ->execute()->fetchAllAssociative();
     }
 
+    public function lastForMe(string $member, int $limit): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                't.id',
+                't.project_id',
+                'p.name AS project_name',
+                't.name',
+                't.status',
+            )
+            ->from('work_projects_tasks', 't')
+            ->innerJoin('t', 'work_projects_projects', 'p', 'p.id  = t.project_id')
+            ->innerJoin('t', 'work_projects_tasks_executors', 'e', 'e.task_id = t.id')
+            ->where('e.member_id = :executor')
+            ->setParameter(':executor', $member)
+            ->orderBy('t.date', 'desc')
+            ->setMaxResults($limit)
+            ->execute()->fetchAllAssociative();
+    }
+
     private function batchLoadExecutors(array $ids): array
     {
         return $this->connection->createQueryBuilder()
