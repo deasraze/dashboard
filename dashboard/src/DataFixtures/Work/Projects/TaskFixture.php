@@ -29,17 +29,17 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
 
         $previous = [];
 
-        $date = new \DateTimeImmutable('-300 days');
+        $date = new \DateTimeImmutable('-100 days');
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             /* @var Project $project */
             $project = $faker->randomElement($projects);
 
             $task = $this->createRandomTask(new Id($i + 1), $project, $faker, $date);
-            $date = $date->modify('+' . $faker->numberBetween(1, 3) . 'days 3minutes');
+            $date = $date->modify('+'.$faker->numberBetween(1, 3).'days 3minutes');
 
             if ($faker->boolean(40)) {
-                $task->plan($date->modify('+' . $faker->numberBetween(1, 30) . 'days'));
+                $task->plan($date->modify('+'.$faker->numberBetween(1, 30).'days'));
             }
 
             $memberships = $project->getMemberships();
@@ -59,7 +59,7 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
                         Status::REJECTED,
                         Status::DONE,
                     ])),
-                    $date->modify('+' . $faker->numberBetween(1, 2) . 'days')
+                    $date->modify('+'.$faker->numberBetween(1, 2).'days')
                 );
             }
 
