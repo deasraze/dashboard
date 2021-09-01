@@ -27,7 +27,7 @@ class ProjectMenu
         $menu
             ->addChild('Dashboard', [
                 'route' => 'work.projects.project.show',
-                'routeParameters' => ['id' => $options['project_id']]
+                'routeParameters' => ['id' => $options['project_id']],
             ])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link')
@@ -39,7 +39,7 @@ class ProjectMenu
         $menu
             ->addChild('Tasks', [
                 'route' => 'work.projects.project.tasks',
-                'routeParameters' => ['project_id' => $options['project_id']]
+                'routeParameters' => ['project_id' => $options['project_id']],
             ])
             ->setAttribute('class', 'nav-item')
             ->setLinkAttribute('class', 'nav-link')
@@ -48,11 +48,19 @@ class ProjectMenu
                 ['pattern' => '/^work\.projects\.project\.tasks\..+/'],
             ]);
 
+        $menu
+            ->addChild('Calendar', [
+                'route' => 'work.projects.project.calendar',
+                'routeParameters' => ['project_id' => $options['project_id']],
+            ])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link');
+
         if ($this->auth->isGranted('ROLE_WORK_MANAGE_PROJECTS')) {
             $menu
                 ->addChild('Settings', [
                     'route' => 'work.projects.project.settings',
-                    'routeParameters' => ['project_id' => $options['project_id']]
+                    'routeParameters' => ['project_id' => $options['project_id']],
                 ])
                 ->setAttribute('class', 'nav-item')
                 ->setLinkAttribute('class', 'nav-link')

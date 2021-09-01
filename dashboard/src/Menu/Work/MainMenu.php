@@ -30,7 +30,7 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link')
             ->setExtra('routes', [
                 ['route' => 'work.projects'],
-                ['route' => 'work.projects.create']
+                ['route' => 'work.projects.create'],
             ]);
 
         $menu
@@ -42,6 +42,11 @@ class MainMenu
                 ['pattern' => '/^work\.projects\.tasks\..+/'],
             ]);
 
+        $menu
+            ->addChild('Calendar', ['route' => 'work.projects.calendar'])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link');
+
         if ($this->auth->isGranted('ROLE_WORK_MANAGE_PROJECTS')) {
             $menu
                 ->addChild('Roles', ['route' => 'work.projects.roles'])
@@ -49,7 +54,7 @@ class MainMenu
                 ->setLinkAttribute('class', 'nav-link')
                 ->setExtra('routes', [
                     ['route' => 'work.projects.roles'],
-                    ['pattern' => '/^work\.projects\.roles\..+/']
+                    ['pattern' => '/^work\.projects\.roles\..+/'],
                 ]);
         }
 
