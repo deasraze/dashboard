@@ -21,12 +21,7 @@ class CalendarFetcher
     {
         $month = new \DateTimeImmutable($query->year.'-'.$query->month.'-01');
 
-        if ('0' === $month->format('w')) {
-            $start = $month->modify('-6 days')->setTime(0, 0);
-        } else {
-            $start = $month->modify('-'.($month->format('w') - 1).' days')->setTime(0, 0);
-        }
-
+        $start = self::calcFirstDayOfWeek($month)->setTime(0, 0);
         $end = $start->modify('+34 days')->setTime(23, 59, 59);
 
         $qb = $this->connection->createQueryBuilder();
@@ -68,5 +63,48 @@ class CalendarFetcher
         $stmt = $qb->execute();
 
         return new Result($stmt->fetchAllAssociative(), $start, $end, $month);
+    }
+
+    public function byWeek(\DateTimeImmutable $date, string $member): Result
+    {
+        $start = self::calcFirstDayOfWeek($date)->setTime(0, 0);
+        $end = $start->modify('+6 days')->setTime(23, 59, 59);
+
+        $qb = $this->connection->createQueryBuilder();
+
+        $items = $qb
+            ->select(
+                't.id',
+                't.name',
+                'to_char(t.date, \'YYYY-MM-DD\') AS date',
+                't.plan_date',
+                't.start_date',
+                't.end_date',
+            )
+            ->from('work_projects_tasks', 't')
+            ->innerJoin('t', 'work_projects_project_memberships', 'ms', 'ms.project_id = t.project_id')
+            ->where($qb->expr()->or(
+                't.date BETWEEN :start AND :end',
+                't.plan_date BETWEEN :start AND :end',
+                't.start_date BETWEEN :start AND :end',
+                't.end_date BETWEEN :start AND :end'
+            ))
+            ->andWhere('ms.member_id = :member')
+            ->setParameter(':start', $start, Types::DATETIME_MUTABLE)
+            ->setParameter(':end', $end, Types::DATETIME_MUTABLE)
+            ->setParameter(':member', $member)
+            ->orderBy('date')
+            ->execute()->fetchAllAssociative();
+
+        return new Result($items, $start, $end, $date);
+    }
+
+    private static function calcFirstDayOfWeek(\DateTimeImmutable $month): \DateTimeImmutable
+    {
+        if ('0' === $month->format('w')) {
+            return $month->modify('-6 days');
+        }
+
+        return $month->modify('-'.($month->format('w') - 1).' days');
     }
 }
