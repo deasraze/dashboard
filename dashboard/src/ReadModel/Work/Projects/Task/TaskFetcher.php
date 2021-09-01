@@ -161,6 +161,25 @@ class TaskFetcher
         return $this->mergeTasksWithExecutors($tasks, $executors);
     }
 
+    public function lastOwn(string $member, int $limit): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select(
+                't.id',
+                't.project_id',
+                'p.name AS project_name',
+                't.name',
+                't.status',
+            )
+            ->from('work_projects_tasks', 't')
+            ->innerJoin('t', 'work_projects_projects', 'p', 'p.id  = t.project_id')
+            ->where('t.author_id = :member')
+            ->setParameter(':member', $member)
+            ->orderBy('t.date', 'desc')
+            ->setMaxResults($limit)
+            ->execute()->fetchAllAssociative();
+    }
+
     private function batchLoadExecutors(array $ids): array
     {
         return $this->connection->createQueryBuilder()
