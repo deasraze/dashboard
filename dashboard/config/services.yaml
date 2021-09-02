@@ -23,6 +23,7 @@ services:
             - '../src/Tests/'
 
     App\Model\User\Entity\User\UserRepository: ~
+    App\Model\Comment\Entity\Comment\CommentRepository: ~
     App\Model\Work\Entity\Members\Group\GroupRepository: ~
     App\Model\Work\Entity\Members\Member\MemberRepository: ~
     App\Model\Work\Entity\Projects\Role\RoleRepository: ~
