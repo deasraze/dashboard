@@ -83,8 +83,6 @@ class CommentController extends AbstractController
 
         try {
             $handler->handle($command);
-
-            return $this->redirectToRoute('work.projects.tasks.show', ['id' => $task->getId()]);
         } catch (\DomainException $e) {
             $this->errors->handle($e);
             $this->addFlash('error', $e->getMessage());
