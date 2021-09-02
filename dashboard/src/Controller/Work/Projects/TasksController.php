@@ -6,6 +6,7 @@ namespace App\Controller\Work\Projects;
 
 use App\Annotation\Guid;
 use App\Controller\ErrorHandler;
+use App\Model\Comment\UseCase\Comment;
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Task\Task;
 use App\Model\Work\UseCase\Projects\Task\ChildOf;
@@ -23,6 +24,7 @@ use App\Model\Work\UseCase\Projects\Task\Take;
 use App\Model\Work\UseCase\Projects\Task\TakeAndStart;
 use App\Model\Work\UseCase\Projects\Task\Type;
 use App\ReadModel\Work\Members\Member\MemberFetcher;
+use App\ReadModel\Work\Projects\Task\CommentFetcher;
 use App\ReadModel\Work\Projects\Task\Filter;
 use App\ReadModel\Work\Projects\Task\TaskFetcher;
 use App\Security\Voter\Work\Projects\TaskAccess;
@@ -496,10 +498,12 @@ class TasksController extends AbstractController
         Request $request,
         MemberFetcher $members,
         TaskFetcher $tasks,
+        CommentFetcher $comments,
         Status\Handler $statusHandler,
         Progress\Handler $progressHandler,
         Type\Handler $typeHandler,
-        Priority\Handler $priorityHandler
+        Priority\Handler $priorityHandler,
+        Comment\Create\Handler $commentHandler
     ): Response {
         $this->denyAccessUnlessGranted(TaskAccess::VIEW, $task);
 
@@ -567,15 +571,36 @@ class TasksController extends AbstractController
             }
         }
 
+        $commentCommand = new Comment\Create\Command(
+            $this->getUser()->getId(),
+            Task::class,
+            (string) $task->getId()->getValue()
+        );
+        $commentForm = $this->createForm(Comment\Create\Form::class, $commentCommand);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            try {
+                $commentHandler->handle($commentCommand);
+
+                return $this->redirectToRoute('work.projects.tasks.show', ['id' => $task->getId()]);
+            } catch (\DomainException $e) {
+                $this->errors->handle($e);
+                $this->addFlash('error', $e->getMessage());
+            }
+        }
+
         return $this->render('app/work/projects/tasks/show.html.twig', [
             'project' => $task->getProject(),
             'task' => $task,
             'member' => $member,
             'children' => $tasks->childrenOf($task->getId()->getValue()),
+            'comments' => $comments->allForTask($task->getId()->getValue()),
             'statusForm' => $statusForm->createView(),
             'progressForm' => $progressForm->createView(),
             'typeForm' => $typeForm->createView(),
             'priorityForm' => $priorityForm->createView(),
+            'commentForm' => $commentForm->createView(),
         ]);
     }
 }

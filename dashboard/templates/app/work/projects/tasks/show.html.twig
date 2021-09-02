@@ -237,12 +237,57 @@
             </div>
 
             {% if task.content %}
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body pb-0">
                         {{ task.content|markdown_to_html|purify|work_processor }}
                     </div>
                 </div>
             {% endif %}
+
+            <div class="card">
+                <div class="card-header">Comments</div>
+                {% if comments|length %}
+                    <div class="card-body">
+                        <div class="direct-chat">
+                            <div class="direct-chat-messages">
+                                {% for comment in comments %}
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">{{ comment.author_name }}</span>
+                                            <span class="direct-chat-timestamp pull-right">{{ comment.date|date('Y-m-d H:i:s') }}</span>
+                                        </div>
+                                        <img class="direct-chat-img" src="{{ gravatar(comment.author_email, 40) }}" alt="">
+                                        <div class="direct-chat-text">
+                                            {{ comment.text|markdown_to_html|purify|work_processor }}
+                                            {% if is_granted('manage', comment) %}
+                                                <div class="controls mb-0">
+                                                    <a href="{{ path('work.projects.tasks.comments.edit', {'task_id': task.id, 'id': comment.id}) }}"
+                                                       class="btn btn-sm btn-outline-secondary">
+                                                        <span class="fa fa-pencil"></span>
+                                                    </a>
+                                                    <form action="{{ path('work.projects.tasks.comments.delete', {'task_id': task.id, 'id': comment.id}) }}"
+                                                          method="post" onsubmit="return confirm('Are you sure?')">
+                                                        <input type="hidden" name="token" value="{{ csrf_token('delete-comment') }}" />
+                                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                            <span class="fa fa-times"></span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="card-body border-top border-light">
+                    {{ form_start(commentForm) }}
+                    {{ form_widget(commentForm) }}
+                    <button type="submit" class="btn btn-primary">Send</button>
+                    {{ form_end(commentForm) }}
+                </div>
+            </div>
 
         </div>
         <div class="col-md-4">
