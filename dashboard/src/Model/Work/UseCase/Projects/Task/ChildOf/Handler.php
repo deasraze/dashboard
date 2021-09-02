@@ -28,7 +28,7 @@ class Handler
 
             $task->setChildOf($parent);
         } else {
-            $task->setChildOf(null);
+            $task->setRoot();
         }
 
         $this->flusher->flush();

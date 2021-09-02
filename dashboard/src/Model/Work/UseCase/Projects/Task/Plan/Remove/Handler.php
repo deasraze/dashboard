@@ -23,7 +23,7 @@ class Handler
     {
         $task = $this->tasks->get(new Id($command->id));
 
-        $task->plan(null);
+        $task->removePlan();
 
         $this->flusher->flush();
     }
