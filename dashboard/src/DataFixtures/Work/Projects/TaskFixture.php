@@ -51,7 +51,7 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
             }
 
             if ($faker->boolean(60)) {
-                $task->changeProgress($actor, $date, $faker->randomElement([25, 50, 75]));
+                $task->changeProgress($actor, $date->modify('+5 hours'), $faker->randomElement([25, 50, 75]));
                 $task->changeStatus(
                     $actor,
                     $date->modify('+'.$faker->numberBetween(1, 2).'days'),
@@ -66,11 +66,11 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
             }
 
             if ($faker->boolean) {
-                $task->changePriority($actor, $date, $faker->randomElement(\array_diff([1, 2, 3, 4], [$task->getPriority()])));
+                $task->changePriority($actor, $date->modify('+3 days'), $faker->randomElement(\array_diff([1, 2, 3, 4], [$task->getPriority()])));
             }
 
             if (\count($previous) > 0 && $faker->boolean(30)) {
-                $task->setChildOf($actor, $date, $faker->randomElement($previous));
+                $task->setChildOf($actor, $date->modify('+5 days'), $faker->randomElement($previous));
             }
 
             $previous[] = $task;
