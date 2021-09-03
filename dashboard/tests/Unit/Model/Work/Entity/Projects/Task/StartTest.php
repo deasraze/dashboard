@@ -19,9 +19,9 @@ class StartTest extends TestCase
         $project = (new ProjectBuilder())->build();
         $task = (new TaskBuilder())->build($project, $member);
 
-        $task->assignExecutor($member);
+        $task->assignExecutor($member, new \DateTimeImmutable(), $member);
 
-        $task->start($date = new \DateTimeImmutable('+2 days'));
+        $task->start($member, $date = new \DateTimeImmutable('+2 days'));
 
         self::assertTrue($task->isWorking());
         self::assertEquals($date, $task->getStartDate());
@@ -34,12 +34,12 @@ class StartTest extends TestCase
         $project = (new ProjectBuilder())->build();
         $task = (new TaskBuilder())->build($project, $member);
 
-        $task->assignExecutor($member);
+        $task->assignExecutor($member, new \DateTimeImmutable(), $member);
 
-        $task->start($date = new \DateTimeImmutable('+2 days'));
+        $task->start($member, $date = new \DateTimeImmutable('+2 days'));
 
         $this->expectExceptionMessage('Task is already started.');
-        $task->start($date);
+        $task->start($member, $date);
     }
 
     public function testWithoutExecutors(): void
@@ -50,6 +50,6 @@ class StartTest extends TestCase
         $task = (new TaskBuilder())->build($project, $member);
 
         $this->expectExceptionMessage('Task does not contain executors.');
-        $task->start(new \DateTimeImmutable('+2 days'));
+        $task->start($member, new \DateTimeImmutable('+2 days'));
     }
 }

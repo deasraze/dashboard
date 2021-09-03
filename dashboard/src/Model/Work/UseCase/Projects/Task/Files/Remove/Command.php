@@ -11,14 +11,19 @@ class Command
     /**
      * @Assert\NotBlank()
      */
+    public string $actor;
+    /**
+     * @Assert\NotBlank()
+     */
     public int $id;
     /**
      * @Assert\NotBlank()
      */
     public string $file;
 
-    public function __construct(int $id, string $file)
+    public function __construct(string $actor, int $id, string $file)
     {
+        $this->actor = $actor;
         $this->id = $id;
         $this->file = $file;
     }

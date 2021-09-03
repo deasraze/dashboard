@@ -34,24 +34,27 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 100; ++$i) {
             /* @var Project $project */
             $project = $faker->randomElement($projects);
+            $actor = $faker->randomElement($project->getMemberships())->getMember();
 
             $task = $this->createRandomTask(new Id($i + 1), $project, $faker, $date);
             $date = $date->modify('+'.$faker->numberBetween(1, 3).'days 3minutes');
 
             if ($faker->boolean(40)) {
-                $task->plan($date->modify('+'.$faker->numberBetween(1, 30).'days'));
+                $task->plan($actor, $date, $date->modify('+'.$faker->numberBetween(1, 30).'days'));
             }
 
             $memberships = $project->getMemberships();
 
             foreach ($faker->randomElements($memberships, $faker->numberBetween(0, \count($memberships))) as $membership) {
                 /* @var Membership $membership */
-                $task->assignExecutor($membership->getMember());
+                $task->assignExecutor($actor, $date, $membership->getMember());
             }
 
             if ($faker->boolean(60)) {
-                $task->changeProgress($faker->randomElement([25, 50, 75]));
+                $task->changeProgress($actor, $date, $faker->randomElement([25, 50, 75]));
                 $task->changeStatus(
+                    $actor,
+                    $date->modify('+'.$faker->numberBetween(1, 2).'days'),
                     new Status($faker->randomElement([
                         Status::WORKING,
                         Status::HELP,
@@ -59,16 +62,15 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
                         Status::REJECTED,
                         Status::DONE,
                     ])),
-                    $date->modify('+'.$faker->numberBetween(1, 2).'days')
                 );
             }
 
             if ($faker->boolean) {
-                $task->changePriority($faker->randomElement(\array_diff([1, 2, 3, 4], [$task->getPriority()])));
+                $task->changePriority($actor, $date, $faker->randomElement(\array_diff([1, 2, 3, 4], [$task->getPriority()])));
             }
 
             if (\count($previous) > 0 && $faker->boolean(30)) {
-                $task->setChildOf($faker->randomElement($previous));
+                $task->setChildOf($actor, $date, $faker->randomElement($previous));
             }
 
             $previous[] = $task;

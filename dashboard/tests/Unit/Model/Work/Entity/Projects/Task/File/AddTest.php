@@ -25,9 +25,9 @@ class AddTest extends TestCase
         $member = (new MemberBuilder())->build($group);
 
         $task->addFile(
-            $id = Id::next(),
             $member,
             $date = new \DateTimeImmutable(),
+            $id = Id::next(),
             $info = new Info('path', 'name.jpg', 350)
         );
 

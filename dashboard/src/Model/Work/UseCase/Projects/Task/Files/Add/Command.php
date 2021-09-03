@@ -11,19 +11,19 @@ class Command
     /**
      * @Assert\NotBlank()
      */
-    public int $id;
+    public string $actor;
     /**
      * @Assert\NotBlank()
      */
-    public string $member;
+    public int $id;
     /**
      * @var File[]
      */
     public array $files;
 
-    public function __construct(int $id, string $member)
+    public function __construct(string $actor, int $id)
     {
+        $this->actor = $actor;
         $this->id = $id;
-        $this->member = $member;
     }
 }

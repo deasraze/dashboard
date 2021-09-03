@@ -25,7 +25,7 @@ class SetChildOfTest extends TestCase
 
         self::assertNull($task->getParent());
 
-        $task->setChildOf($parent);
+        $task->setChildOf($member, new \DateTimeImmutable(), $parent);
 
         self::assertEquals($parent, $task->getParent());
     }
@@ -38,7 +38,7 @@ class SetChildOfTest extends TestCase
         $task = (new TaskBuilder())->build($project, $member);
 
         $this->expectExceptionMessage('Cyclomatic children.');
-        $task->setChildOf($task);
+        $task->setChildOf($member, new \DateTimeImmutable(), $task);
     }
 
     public function testCycle(): void
@@ -54,10 +54,10 @@ class SetChildOfTest extends TestCase
         $childOne = $taskBuilder->build($project, $member);
         $childTwo = $taskBuilder->build($project, $member);
 
-        $childOne->setChildOf($task);
-        $childTwo->setChildOf($childOne);
+        $childOne->setChildOf($member, new \DateTimeImmutable(), $task);
+        $childTwo->setChildOf($member, new \DateTimeImmutable(), $childOne);
 
         $this->expectExceptionMessage('Cyclomatic children.');
-        $task->setChildOf($childTwo);
+        $task->setChildOf($member, new \DateTimeImmutable(), $childTwo);
     }
 }

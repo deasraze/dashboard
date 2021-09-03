@@ -51,11 +51,11 @@ class Handler
             );
 
             if (null !== $parent) {
-                $task->setChildOf($parent);
+                $task->setChildOf($member, $date, $parent);
             }
 
             if (null !== $command->plan) {
-                $task->plan($command->plan);
+                $task->plan($member, $date, $command->plan);
             }
 
             $date = $date->modify('+2 sec');

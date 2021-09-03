@@ -23,11 +23,11 @@ class RevokeTest extends TestCase
 
         $executor = $memberBuilder->build($group);
 
-        $task->assignExecutor($executor);
+        $task->assignExecutor($member, new \DateTimeImmutable(), $executor);
 
         self::assertTrue($task->hasExecutor($executor->getId()));
 
-        $task->revokeExecutor($executor->getId());
+        $task->revokeExecutor($member, new \DateTimeImmutable(), $executor->getId());
 
         self::assertEquals([], $task->getExecutors());
         self::assertFalse($task->hasExecutor($executor->getId()));
@@ -45,6 +45,6 @@ class RevokeTest extends TestCase
         $executor = $memberBuilder->build($group);
 
         $this->expectExceptionMessage('Executor is not assigned.');
-        $task->revokeExecutor($executor->getId());
+        $task->revokeExecutor($member, new \DateTimeImmutable(), $executor->getId());
     }
 }
