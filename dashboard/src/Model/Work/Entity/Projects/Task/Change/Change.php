@@ -20,6 +20,7 @@ class Change
      */
     private Id $id;
     /**
+     * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="App\Model\Work\Entity\Projects\Task\Task", inversedBy="changes")
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
