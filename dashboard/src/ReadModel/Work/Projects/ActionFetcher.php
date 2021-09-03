@@ -32,7 +32,7 @@ class ActionFetcher
             ->leftJoin('c', 'work_members_members', 'set_executor', 'set_executor.id = c.set_executor_id')
             ->leftJoin('c', 'work_members_members', 'set_revoked_executor', 'set_revoked_executor.id = c.set_revoked_executor_id')
             ->leftJoin('c', 'work_projects_projects', 'set_project', 'set_project.id = c.set_project_id')
-            ->where('c.task_id = :task')
+            ->where('task.id = :task')
             ->setParameter('task', $id)
             ->orderBy('date')
             ->execute()->fetchAllAssociative();
