@@ -62,7 +62,7 @@ class Set
      */
     private ?bool $removedParent = null;
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @ORM\Column(type="date_immutable", nullable=true)
      */
     private ?\DateTimeImmutable $plan = null;
     /**
