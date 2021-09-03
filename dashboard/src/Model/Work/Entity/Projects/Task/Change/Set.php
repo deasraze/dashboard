@@ -38,11 +38,11 @@ class Set
      */
     private ?FileId $removedFileId = null;
     /**
-     * @ORM\Column(type="work_projects_task_type", nullable=true)
+     * @ORM\Column(type="work_projects_task_type", length=16, nullable=true)
      */
     private ?Type $type = null;
     /**
-     * @ORM\Column(type="work_projects_task_status", nullable=true)
+     * @ORM\Column(type="work_projects_task_status", length=16, nullable=true)
      */
     private ?Status $status = null;
     /**
