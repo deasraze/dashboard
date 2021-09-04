@@ -8,11 +8,6 @@ trait EventsTrait
 {
     private array $recordedEvents = [];
 
-    public function recordEvent(object $event): void
-    {
-        $this->recordedEvents[] = $event;
-    }
-
     public function releaseEvents(): array
     {
         $events = $this->recordedEvents;
@@ -20,5 +15,10 @@ trait EventsTrait
         $this->recordedEvents = [];
 
         return $events;
+    }
+
+    protected function recordEvent(object $event): void
+    {
+        $this->recordedEvents[] = $event;
     }
 }
