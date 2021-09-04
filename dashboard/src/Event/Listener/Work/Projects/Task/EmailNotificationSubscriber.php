@@ -37,7 +37,7 @@ class EmailNotificationSubscriber implements EventSubscriberInterface
 
     public function onTaskExecutorAssignedExecutor(TaskExecutorAssigned $event): void
     {
-        if ($event->actorId === $event->executorId) {
+        if ($event->actorId->isEqual($event->executorId)) {
             return;
         }
 
