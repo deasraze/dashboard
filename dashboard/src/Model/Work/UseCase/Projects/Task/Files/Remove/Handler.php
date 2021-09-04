@@ -35,6 +35,6 @@ class Handler
             new FileId($command->file)
         );
 
-        $this->flusher->flush();
+        $this->flusher->flush($task);
     }
 }

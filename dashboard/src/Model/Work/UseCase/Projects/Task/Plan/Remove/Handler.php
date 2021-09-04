@@ -30,6 +30,6 @@ class Handler
 
         $task->removePlan($actor, new \DateTimeImmutable());
 
-        $this->flusher->flush();
+        $this->flusher->flush($task);
     }
 }

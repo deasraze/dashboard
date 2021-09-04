@@ -35,6 +35,6 @@ class Handler
             new Type($command->type)
         );
 
-        $this->flusher->flush();
+        $this->flusher->flush($task);
     }
 }

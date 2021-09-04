@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model\Work\Entity\Projects\Task;
 
+use App\Model\AggregateRoot;
+use App\Model\EventsTrait;
 use App\Model\Work\Entity\Members\Member\Id as MemberId;
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Project\Project;
 use App\Model\Work\Entity\Projects\Task\Change\Change;
 use App\Model\Work\Entity\Projects\Task\Change\Id as ChangeId;
 use App\Model\Work\Entity\Projects\Task\Change\Set;
+use App\Model\Work\Entity\Projects\Task\Event;
 use App\Model\Work\Entity\Projects\Task\File\File;
 use App\Model\Work\Entity\Projects\Task\File\Id as FileId;
 use App\Model\Work\Entity\Projects\Task\File\Info;
@@ -23,8 +26,10 @@ use Webmozart\Assert\Assert;
  *     @ORM\Index(columns={"date"})
  * })
  */
-class Task
+class Task implements AggregateRoot
 {
+    use EventsTrait;
+
     /**
      * @ORM\Id()
      * @ORM\Column(type="work_projects_task_id")
@@ -160,6 +165,8 @@ class Task
             $this->content = $content;
             $this->addChange($actor, $date, Set::fromContent($content));
         }
+
+        $this->recordEvent(new Event\TaskEdited($this->id, $actor->getId(), $name, $content));
     }
 
     public function addFile(Member $actor, \DateTimeImmutable $date, FileId $id, Info $info): void
@@ -167,6 +174,7 @@ class Task
         $this->files->add(new File($id, $this, $actor, $date, $info));
 
         $this->addChange($actor, $date, Set::fromFile($id));
+        $this->recordEvent(new Event\TaskFileAdded($this->id, $actor->getId(), $id, $info));
     }
 
     public function removeFile(Member $actor, \DateTimeImmutable $date, FileId $id): void
@@ -176,6 +184,7 @@ class Task
                 $this->files->removeElement($current);
 
                 $this->addChange($actor, $date, Set::fromRemovedFile($current->getId()));
+                $this->recordEvent(new Event\TaskFileRemoved($this->id, $actor->getId(), $id, $current->getInfo()));
 
                 return;
             }
@@ -215,6 +224,7 @@ class Task
         $this->planDate = $plan;
 
         $this->addChange($actor, $date, Set::fromPlan($plan));
+        $this->recordEvent(new Event\TaskPlanChanged($this->id, $actor->getId(), $plan));
     }
 
     public function removePlan(Member $actor, \DateTimeImmutable $date): void
@@ -222,6 +232,7 @@ class Task
         $this->planDate = null;
 
         $this->addChange($actor, $date, Set::fromRemovedPlan());
+        $this->recordEvent(new Event\TaskPlanChanged($this->id, $actor->getId(), null));
     }
 
     public function move(Member $actor, \DateTimeImmutable $date, Project $project): void
@@ -244,6 +255,7 @@ class Task
         $this->type = $type;
 
         $this->addChange($actor, $date, Set::fromType($type));
+        $this->recordEvent(new Event\TaskTypeChanged($this->id, $actor->getId(), $type));
     }
 
     public function changeProgress(Member $actor, \DateTimeImmutable $date, int $progress): void
@@ -257,6 +269,7 @@ class Task
         $this->progress = $progress;
 
         $this->addChange($actor, $date, Set::fromProgress($progress));
+        $this->recordEvent(new Event\TaskProgressChanged($this->id, $actor->getId(), $progress));
     }
 
     public function changePriority(Member $actor, \DateTimeImmutable $date, int $priority): void
@@ -270,6 +283,7 @@ class Task
         $this->priority = $priority;
 
         $this->addChange($actor, $date, Set::fromPriority($priority));
+        $this->recordEvent(new Event\TaskPriorityChanged($this->id, $actor->getId(), $priority));
     }
 
     public function changeStatus(Member $actor, \DateTimeImmutable $date, Status $status): void
@@ -281,6 +295,7 @@ class Task
         $this->status = $status;
 
         $this->addChange($actor, $date, Set::fromStatus($status));
+        $this->recordEvent(new Event\TaskStatusChanged($this->id, $actor->getId(), $status));
 
         if (!$status->isNew() && null === $this->startDate) {
             $this->startDate = $date;
@@ -306,6 +321,7 @@ class Task
         $this->executors->add($executor);
 
         $this->addChange($actor, $date, Set::fromExecutor($executor->getId()));
+        $this->recordEvent(new Event\TaskExecutorAssigned($this->id, $actor->getId(), $executor->getId()));
     }
 
     public function revokeExecutor(Member $actor, \DateTimeImmutable $date, MemberId $id): void
@@ -315,6 +331,7 @@ class Task
                 $this->executors->removeElement($executor);
 
                 $this->addChange($actor, $date, Set::fromRevokedExecutor($executor->getId()));
+                $this->recordEvent(new Event\TaskExecutorAssigned($this->id, $actor->getId(), $executor->getId()));
 
                 return;
             }

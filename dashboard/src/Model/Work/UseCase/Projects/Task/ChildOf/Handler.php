@@ -38,6 +38,6 @@ class Handler
             $task->setRoot($actor, $date);
         }
 
-        $this->flusher->flush();
+        $this->flusher->flush($task);
     }
 }
