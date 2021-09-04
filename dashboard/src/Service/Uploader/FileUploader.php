@@ -35,6 +35,11 @@ class FileUploader
         return new File($path, $name, $file->getSize());
     }
 
+    public function remove(string $path, string $name): void
+    {
+        $this->storage->delete($path.'/'.$name);
+    }
+
     public function generateUrl(string $path): string
     {
         return $this->baseUrl.'/'.$path;
