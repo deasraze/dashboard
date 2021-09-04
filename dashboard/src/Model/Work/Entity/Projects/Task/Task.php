@@ -331,7 +331,7 @@ class Task implements AggregateRoot
                 $this->executors->removeElement($executor);
 
                 $this->addChange($actor, $date, Set::fromRevokedExecutor($executor->getId()));
-                $this->recordEvent(new Event\TaskExecutorAssigned($this->id, $actor->getId(), $executor->getId()));
+                $this->recordEvent(new Event\TaskExecutorRevoked($this->id, $actor->getId(), $executor->getId()));
 
                 return;
             }
