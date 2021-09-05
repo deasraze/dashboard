@@ -23,6 +23,10 @@ services:
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
       MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
+      CENTRIFUGO_WS_HOST: ${CENTRIFUGO_WS_HOST}
+      CENTRIFUGO_API_HOST: http://centrifugo:8000
+      CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY}
+      CENTRIFUGO_SECRET: ${CENTRIFUGO_SECRET}
     depends_on:
       - postgres
       - redis
@@ -43,6 +47,10 @@ services:
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
       MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
+      CENTRIFUGO_WS_HOST: ${CENTRIFUGO_WS_HOST}
+      CENTRIFUGO_API_HOST: http://centrifugo:8000
+      CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY}
+      CENTRIFUGO_SECRET: ${CENTRIFUGO_SECRET}
     depends_on:
       - postgres
       - redis
@@ -63,6 +71,10 @@ services:
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
       MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
+      CENTRIFUGO_WS_HOST: ${CENTRIFUGO_WS_HOST}
+      CENTRIFUGO_API_HOST: http://centrifugo:8000
+      CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY}
+      CENTRIFUGO_SECRET: ${CENTRIFUGO_SECRET}
     depends_on:
       - postgres
       - redis
@@ -92,6 +104,20 @@ services:
     restart: always
     volumes:
       - dashboard-queue-redis:/data
+
+  centrifugo:
+    image: ${REGISTRY_ADDRESS}/centrifugo:${IMAGE_TAG}
+    restart: always
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    environment:
+      CENTRIFUGO_ALLOWED_ORIGINS: ${CENTRIFUGO_ALLOWED_ORIGINS}
+      CENTRIFUGO_TOKEN_HMAC_SECRET_KEY: ${CENTRIFUGO_SECRET}
+      CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY}
+    ports:
+      - "8000:8000"
 
 volumes:
   dashboard-postgres:

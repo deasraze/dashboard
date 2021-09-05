@@ -72,6 +72,7 @@ build-production:
 	docker build --pull -f dashboard/docker/production/php/php-cli.docker -t ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/postgres/postgres.docker -t ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG} dashboard
 	docker build --pull -f dashboard/docker/production/redis/redis.docker -t ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG} dashboard
+	docker build --pull -f centrifugo/docker/production/centrifugo.docker -t ${REGISTRY_ADDRESS}/centrifugo:${IMAGE_TAG} centrifugo
 
 push-production:
 	docker push ${REGISTRY_ADDRESS}/nginx:${IMAGE_TAG}
@@ -79,6 +80,7 @@ push-production:
 	docker push ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/centrifugo:${IMAGE_TAG}
 
 deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'rm -rf docker-compose.yml .env'
@@ -94,6 +96,10 @@ deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "STORAGE_FTP_HOST=${STORAGE_FTP_HOST}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "STORAGE_FTP_USERNAME=${STORAGE_FTP_USERNAME}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "STORAGE_FTP_PASSWORD=${STORAGE_FTP_PASSWORD}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "CENTRIFUGO_ALLOWED_ORIGINS=${CENTRIFUGO_ALLOWED_ORIGINS}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "CENTRIFUGO_WS_HOST=${CENTRIFUGO_WS_HOST}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "CENTRIFUGO_API_KEY=${CENTRIFUGO_API_KEY}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "CENTRIFUGO_SECRET=${CENTRIFUGO_SECRET}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose pull'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose up --build -d'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done'

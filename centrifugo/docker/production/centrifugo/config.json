@@ -1,12 +1,9 @@
 {
-  "allowed_origins": [
-    "http://localhost:8080"
-  ],
   "namespaces": [
     {
       "name": "alerts",
       "publish": false,
-      "watch": true,
+      "watch": false,
       "anonymous": false,
       "presence": true,
       "join_leave": true,
