@@ -135,13 +135,13 @@ services:
         soft: 65535
         hard: 65535
     environment:
-      CENTRIFUGO_SECRET: ${CENTRIFUGO_SECRET}
+      CENTRIFUGO_TOKEN_HMAC_SECRET_KEY: ${CENTRIFUGO_SECRET}
       CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY}
     volumes:
       - ./centrifugo/docker/development/centrifugo:/centrifugo
     ports:
       - "8083:8000"
-    command: centrifugo --admin --admin_insecure --client_insecure
+    command: centrifugo --admin --admin_insecure
 
 volumes:
   dashboard-postgres:
