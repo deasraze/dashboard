@@ -25,6 +25,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - queue-redis
 
   php-cli:
     image: ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
@@ -42,6 +43,26 @@ services:
     depends_on:
       - postgres
       - redis
+      - queue-redis
+
+  queue-worker:
+    image: ${REGISTRY_ADDRESS}/php-cli:${IMAGE_TAG}
+    restart: always
+    environment:
+      APP_SECRET: ${DASHBOARD_APP_SECRET}
+      DATABASE_URL: postgresql://dashboard:${DASHBOARD_DB_PASSWORD}@postgres:5432/dashboard?serverVersion=13&charset=utf8
+      REDIS_URL: tcp://redis:6379?password=${DASHBOARD_REDIS_PASSWORD}
+      MAILER_DSN: ${DASHBOARD_MAILER_DSN}
+      OAUTH_GITHUB_SECRET: ${DASHBOARD_OAUTH_GITHUB_SECRET}
+      STORAGE_BASE_URL: ${STORAGE_BASE_URL}
+      STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
+      STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
+      STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
+    depends_on:
+      - postgres
+      - redis
+      - queue-redis
+    command: sh -c "sleep 30 && php bin/console messenger:consume async -vv"
 
   postgres:
     image: ${REGISTRY_ADDRESS}/postgres:${IMAGE_TAG}
@@ -60,6 +81,13 @@ services:
       - dashboard-redis:/data
     command: redis-server --requirepass ${DASHBOARD_REDIS_PASSWORD}
 
+  queue-redis:
+    image: ${REGISTRY_ADDRESS}/redis:${IMAGE_TAG}
+    restart: always
+    volumes:
+      - dashboard-queue-redis:/data
+
 volumes:
   dashboard-postgres:
   dashboard-redis:
+  dashboard-queue-redis:

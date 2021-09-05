@@ -1,6 +1,6 @@
-up: docker-up dashboard-assets-watch
+up: docker-up dashboard-profiles-up
 down: docker-down
-restart: docker-down docker-up dashboard-assets-watch
+restart: docker-down docker-up dashboard-profiles-up
 init: docker-down-clear docker-pull docker-build docker-up dashboard-init
 test: dashboard-test
 test-unit: dashboard-test-unit
@@ -21,7 +21,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures dashboard-assets-watch
+dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures dashboard-profiles-up
 
 dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
@@ -42,8 +42,9 @@ dashboard-fixtures:
 dashboard-assets-dev:
 	docker-compose run --rm node npm run dev
 
-dashboard-assets-watch:
+dashboard-profiles-up:
 	docker-compose run --name node-watch -d node-watch
+	docker-compose run --name queue-worker -d queue-worker
 
 dashboard-test-db-init: dashboard-test-drop-db dashboard-test-db dashboard-test-schema dashboard-test-fixtures
 
