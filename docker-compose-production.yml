@@ -22,6 +22,7 @@ services:
       STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
+      MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
     depends_on:
       - postgres
       - redis
@@ -40,6 +41,7 @@ services:
       STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
+      MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
     depends_on:
       - postgres
       - redis
@@ -58,6 +60,7 @@ services:
       STORAGE_FTP_HOST: ${STORAGE_FTP_HOST}
       STORAGE_FTP_USERNAME: ${STORAGE_FTP_USERNAME}
       STORAGE_FTP_PASSWORD: ${STORAGE_FTP_PASSWORD}
+      MESSENGER_TRANSPORT_DSN: redis://queue-redis:6379/messages
     depends_on:
       - postgres
       - redis
