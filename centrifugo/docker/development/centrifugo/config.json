@@ -1,6 +1,9 @@
 {
   "secret": "",
   "api_key": "",
+  "allowed_origins": [
+    "http://localhost:8080"
+  ],
   "namespaces": [
     {
       "name": "alerts",
