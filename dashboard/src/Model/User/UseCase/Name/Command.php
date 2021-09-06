@@ -16,11 +16,11 @@ class Command
     /**
      * @Assert\NotBlank()
      */
-    public string $firstName;
+    public string $first;
     /**
      * @Assert\NotBlank()
      */
-    public string $lastName;
+    public string $last;
 
     public function __construct(string $id)
     {
@@ -31,8 +31,8 @@ class Command
     {
         $command = new self($user->getId()->getValue());
 
-        $command->firstName = $user->getName()->getFirst();
-        $command->lastName = $user->getName()->getLast();
+        $command->first = $user->getName()->getFirst();
+        $command->last = $user->getName()->getLast();
 
         return $command;
     }
