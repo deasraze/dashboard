@@ -45,14 +45,14 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass(string $class): bool
     {
-        return (UserIdentity::class === $class || \is_subclass_of($class, UserIdentity::class));
+        return UserIdentity::class === $class || \is_subclass_of($class, UserIdentity::class);
     }
 
     private function loadUser(string $identifier): AuthView
     {
         $chunks = \explode(':', $identifier);
 
-        if (\count($chunks) === 2 && $user = $this->users->findForAuthByNetwork($chunks[0], $chunks[1])) {
+        if (2 === \count($chunks) && $user = $this->users->findForAuthByNetwork($chunks[0], $chunks[1])) {
             return $user;
         }
 
@@ -68,7 +68,7 @@ class UserProvider implements UserProviderInterface
         return new UserIdentity(
             $user->id,
             $user->email ?: $username,
-            $user->password_hash ?: '',
+            $user->passwordHash ?: '',
             $user->name ?: $username,
             $user->role,
             $user->status
