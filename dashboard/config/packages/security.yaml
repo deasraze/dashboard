@@ -5,6 +5,9 @@ security:
     providers:
         fetcher:
             id: App\Security\UserProvider
+    password_hashers:
+        App\Security\UserIdentity:
+            algorithm: auto
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
