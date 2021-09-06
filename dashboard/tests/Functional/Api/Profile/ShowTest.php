@@ -26,7 +26,7 @@ class ShowTest extends DbWebTestCase
         $this->assertResponseIsSuccessful();
         self::assertJson($content = $this->client->getResponse()->getContent());
 
-        $data = \json_decode($content);
+        $data = \json_decode($content, true);
 
         self::assertEquals([
             'id' => ProfileFixture::USER_ID,
