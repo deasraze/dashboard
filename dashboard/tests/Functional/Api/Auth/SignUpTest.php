@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Api\Auth;
 
 use App\Tests\Functional\DbWebTestCase;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 class SignUpTest extends DbWebTestCase
 {
+    use ArraySubsetAsserts;
+
     private const URI = '/api/auth/signup';
 
     protected function setUp(): void
@@ -55,7 +58,7 @@ class SignUpTest extends DbWebTestCase
 
         $data = \json_decode($content, true);
 
-        self::assertContains([
+        self::assertArraySubset([
             'violations' => [
                 ['propertyPath' => 'first_name', 'title' => 'This value should not be blank.'],
                 ['propertyPath' => 'last_name', 'title' => 'This value should not be blank.'],
@@ -65,7 +68,7 @@ class SignUpTest extends DbWebTestCase
         ], $data);
     }
 
-    public function testExist(): void
+    public function testExists(): void
     {
         $this->client->request('POST', self::URI, [], [], [], \json_encode([
             'first_name' => 'Tom',
@@ -79,9 +82,9 @@ class SignUpTest extends DbWebTestCase
 
         $data = \json_decode($content, true);
 
-        self::assertContains([
+        self::assertArraySubset([
             'error' => [
-                'message' => 'User is already exists.',
+                'message' => 'User with this email is already registered.',
             ],
         ], $data);
     }
