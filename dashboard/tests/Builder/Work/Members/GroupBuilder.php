@@ -16,6 +16,15 @@ class GroupBuilder
         $this->name = 'Group';
     }
 
+    public function withName(string $name): self
+    {
+        $clone = clone $this;
+
+        $clone->name = $name;
+
+        return $clone;
+    }
+
     public function build(): Group
     {
         return new Group(
