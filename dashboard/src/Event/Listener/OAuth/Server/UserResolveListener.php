@@ -27,6 +27,10 @@ final class UserResolveListener
             return;
         }
 
+        if (!$user->getPassword()) {
+            return;
+        }
+
         if (!$this->hasher->verify($event->getPassword(), $user->getPassword())) {
             return;
         }
