@@ -21,7 +21,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-wait-db dashboard-migrations dashboard-fixtures dashboard-profiles-up
+dashboard-init: dashboard-composer-install dashboard-assets-install dashboard-oauth-keys dashboard-wait-db dashboard-migrations dashboard-fixtures dashboard-profiles-up
 
 dashboard-composer-install:
 	docker-compose run --rm php-cli composer install
@@ -29,6 +29,11 @@ dashboard-composer-install:
 dashboard-assets-install:
 	docker-compose run --rm node yarn install
 	docker-compose run --rm node npm rebuild node-sass
+
+dashboard-oauth-keys:
+	docker-compose run --rm php-cli mkdir -p var/ouath
+	docker-compose run --rm php-cli openssl genrsa -out var/ouath/private.key 2048
+	docker-compose run --rm php-cli openssl rsa -in var/ouath/private.key -pubout -out var/ouath/public.key
 
 dashboard-wait-db:
 	until docker-compose exec -T postgres pg_isready --timeout=0 --dbname=dashboard ; do sleep 1 ; done

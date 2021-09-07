@@ -8,6 +8,9 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
+    "defuse/php-encryption": {
+        "version": "v2.3.1"
+    },
     "dms/phpunit-arraysubset-asserts": {
         "version": "v0.3.0"
     },
@@ -169,6 +172,15 @@
     "laminas/laminas-code": {
         "version": "4.3.0"
     },
+    "lcobucci/clock": {
+        "version": "2.0.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.4"
+    },
+    "league/event": {
+        "version": "2.2.0"
+    },
     "league/flysystem": {
         "version": "2.2.3"
     },
@@ -197,6 +209,9 @@
     "league/oauth2-github": {
         "version": "3.0.0"
     },
+    "league/oauth2-server": {
+        "version": "8.3.2"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
@@ -206,6 +221,18 @@
     "nikic/php-parser": {
         "version": "v4.10.5"
     },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "0cd4d2d0e7f646fda75f9944f747a56e6ed13d4c"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "paragonie/random_compat": {
         "version": "v9.99.100"
     },
@@ -214,6 +241,9 @@
     },
     "phar-io/version": {
         "version": "3.1.0"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -614,6 +644,9 @@
     "symfony/proxy-manager-bridge": {
         "version": "v5.3.0"
     },
+    "symfony/psr-http-message-bridge": {
+        "version": "v2.1.1"
+    },
     "symfony/redis-messenger": {
         "version": "v5.3.7"
     },
@@ -773,6 +806,19 @@
     },
     "theseer/tokenizer": {
         "version": "1.2.0"
+    },
+    "trikoder/oauth2-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "43774de114904e86d18de0cea92f368d8e3c7499"
+        },
+        "files": [
+            "config/packages/trikoder_oauth2.yaml",
+            "config/routes/trikoder_oauth2.yaml"
+        ]
     },
     "twig/extra-bundle": {
         "version": "v3.3.1"

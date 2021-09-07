@@ -83,3 +83,7 @@ services:
             - '%env(CENTRIFUGO_API_HOST)%/api'
             - '%env(CENTRIFUGO_API_KEY)%'
             - '%env(CENTRIFUGO_SECRET)%'
+
+    App\Event\Listener\OAuth\Server\UserResolveListener:
+        tags:
+            - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
