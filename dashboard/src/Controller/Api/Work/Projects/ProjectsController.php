@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Work\Projects;
 
+use App\Controller\Api\PaginationNormalizer;
 use App\ReadModel\Work\Projects\Project\Filter;
 use App\ReadModel\Work\Projects\Project\ProjectFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,13 +54,7 @@ class ProjectsController extends AbstractController
                 'name' => $item['name'],
                 'status' => $item['status'],
             ], (array) $pagination->getItems()),
-            'pagination' => [
-                'total' => $pagination->count(),
-                'count' => $pagination->getTotalItemCount(),
-                'per_page' => $pagination->getItemNumberPerPage(),
-                'page' => $pagination->getCurrentPageNumber(),
-                'pages' => \ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
-            ],
+            'pagination' => PaginationNormalizer::normalize($pagination),
         ]);
     }
 }
