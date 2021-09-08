@@ -1,0 +1,8 @@
+security:
+    password_hashers:
+        App\Security\UserIdentity:
+            algorithm: auto
+    firewalls:
+        api:
+            http_basic:
+                provider: fetcher
