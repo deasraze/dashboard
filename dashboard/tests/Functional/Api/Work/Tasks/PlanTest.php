@@ -98,10 +98,6 @@ class PlanTest extends DbWebTestCase
         self::assertJson($content = $this->client->getResponse()->getContent());
         $data = \json_decode($content, true);
 
-        self::assertArraySubset([
-            'violations' => [
-                ['propertyPath' => 'date', 'title' => 'This value should not be blank.'],
-            ],
-        ], $data);
+        self::assertArraySubset(['detail' => 'Date field is required.'], $data);
     }
 }

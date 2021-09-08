@@ -7,6 +7,7 @@ namespace App\Controller\Api\Work\Projects;
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Task\File\File;
 use App\Model\Work\Entity\Projects\Task\Task;
+use App\Model\Work\UseCase\Projects\Task\Plan;
 use App\ReadModel\Work\Projects\Action\ActionFetcher;
 use App\ReadModel\Work\Projects\Action\Feed\Feed;
 use App\ReadModel\Work\Projects\Action\Feed\Item;
@@ -16,16 +17,72 @@ use App\Service\Gravatar;
 use App\Service\Uploader\FileUploader;
 use App\Service\Work\Processor\Processor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * @Route("/work/projects/tasks", name="work.projects.tasks")
+ * @Route("/work/projects/tasks", name="work.projects.tasks", requirements={"id"="\d+"})
  */
 class TasksController extends AbstractController
 {
+    private SerializerInterface $serializer;
+    private ValidatorInterface $validator;
+
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
+    {
+        $this->serializer = $serializer;
+        $this->validator = $validator;
+    }
+
     /**
-     * @Route("/{id}", name=".show", requirements={"id"="\d+"})
+     * @Route("/{id}/plan", name=".plan", methods={"PUT"})
+     */
+    public function plan(Task $task, Request $request, Plan\Set\Handler $handler): Response
+    {
+        $this->denyAccessUnlessGranted(TaskAccess::MANAGE, $task);
+
+        $data = \json_decode($request->getContent(), true);
+
+        if (empty($data['date'])) {
+            throw new BadRequestException('Date field is required.');
+        }
+
+        $command = new Plan\Set\Command($this->getUser()->getId(), $task->getId()->getValue());
+        $command->date = new \DateTimeImmutable($data['date']);
+
+        $violations = $this->validator->validate($command);
+
+        if (\count($violations) > 0) {
+            $json = $this->serializer->serialize($violations, 'json');
+
+            return new JsonResponse($json, Response::HTTP_BAD_REQUEST, [], true);
+        }
+
+        $handler->handle($command);
+
+        return $this->json([]);
+    }
+
+    /**
+     * @Route("/{id}/plan", name=".plan.delete", methods={"DELETE"})
+     */
+    public function removePlan(Task $task, Plan\Remove\Handler $handler): Response
+    {
+        $this->denyAccessUnlessGranted(TaskAccess::MANAGE, $task);
+
+        $command = new Plan\Remove\Command($this->getUser()->getId(), $task->getId()->getValue());
+        $handler->handle($command);
+
+        return $this->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}", name=".show", methods={"GET"})
      */
     public function show(
         Task $task,
