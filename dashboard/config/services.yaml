@@ -61,14 +61,14 @@ services:
         tags:
             - { name: knp_menu.menu_builder, method: build, alias: work_projects_task_presets }
 
-    App\Twig\Extension\Work\Processor\Driver\:
-        resource: '../src/Twig/Extension/Work/Processor/Driver/*Driver.php'
+    App\Service\Work\Processor\Driver\:
+        resource: '../src/Service/Work/Processor/Driver/*Driver.php'
         tags:
-            - 'app.twig.work_processor.driver'
+            - 'app.work_processor.driver'
 
-    App\Twig\Extension\Work\Processor\ProcessorExtension:
+    App\Service\Work\Processor\Processor:
         arguments:
-            - !tagged_iterator app.twig.work_processor.driver
+            - !tagged_iterator app.work_processor.driver
 
     App\Service\Uploader\FileUploader:
         arguments:
