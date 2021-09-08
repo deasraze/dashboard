@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Service\Work\Processor;
 
 use App\Service\Work\Processor\Driver\Driver;
-use Twig\Extension\AbstractExtension;
 
-class Processor extends AbstractExtension
+class Processor
 {
     /**
      * @var Driver[]
