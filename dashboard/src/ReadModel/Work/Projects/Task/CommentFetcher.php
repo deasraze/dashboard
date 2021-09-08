@@ -7,17 +7,14 @@ namespace App\ReadModel\Work\Projects\Task;
 use App\Model\Work\Entity\Projects\Task\Task;
 use App\ReadModel\Comment\CommentRow;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class CommentFetcher
 {
     private Connection $connection;
-    private DenormalizerInterface $denormalizer;
 
-    public function __construct(Connection $connection, DenormalizerInterface $denormalizer)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->denormalizer = $denormalizer;
     }
 
     public function allForTask(int $id): array
@@ -39,6 +36,17 @@ class CommentFetcher
             ->orderBy('date')
             ->execute()->fetchAllAssociative();
 
-        return $this->denormalizer->denormalize($result, CommentRow::class.'[]');
+        return \array_map(static function (array $item): CommentRow {
+            $commentRow = new CommentRow();
+
+            $commentRow->id = $item['id'];
+            $commentRow->date = $item['date'];
+            $commentRow->author_id = $item['author_id'];
+            $commentRow->author_name = $item['author_name'];
+            $commentRow->author_email = $item['author_email'];
+            $commentRow->text = $item['text'];
+
+            return $commentRow;
+        }, $result);
     }
 }
