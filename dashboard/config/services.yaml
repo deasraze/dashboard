@@ -87,3 +87,6 @@ services:
     App\Event\Listener\OAuth\Server\UserResolveListener:
         tags:
             - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
+
+    Parsedown:
+        class: Parsedown
