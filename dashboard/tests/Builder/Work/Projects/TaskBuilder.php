@@ -21,12 +21,21 @@ class TaskBuilder
 
     public function __construct()
     {
-        $this->id       = new Id(1);
-        $this->date     = new \DateTimeImmutable();
-        $this->type     = new Type(Type::FEATURE);
+        $this->id = new Id(1);
+        $this->date = new \DateTimeImmutable();
+        $this->type = new Type(Type::FEATURE);
         $this->priority = 1;
-        $this->name     = 'Test Task';
-        $this->content  = 'Test Content';
+        $this->name = 'Test Task';
+        $this->content = 'Test Content';
+    }
+
+    public function withId(Id $id): self
+    {
+        $clone = clone $this;
+
+        $clone->id = $id;
+
+        return $clone;
     }
 
     public function withType(Type $type): self

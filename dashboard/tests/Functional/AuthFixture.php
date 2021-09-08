@@ -28,9 +28,25 @@ class AuthFixture extends Fixture
         return 'auth-user@app.test';
     }
 
+    public static function userCredentials(): array
+    {
+        return [
+            'PHP_AUTH_USER' => self::userIdentifier(),
+            'PHP_AUTH_PW' => 'password',
+        ];
+    }
+
     public static function adminIdentifier(): string
     {
         return 'auth-admin@app.test';
+    }
+
+    public static function adminCredentials(): array
+    {
+        return [
+            'PHP_AUTH_USER' => self::adminIdentifier(),
+            'PHP_AUTH_PW' => 'password',
+        ];
     }
 
     public function load(ObjectManager $manager): void

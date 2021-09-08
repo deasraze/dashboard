@@ -19,7 +19,7 @@ class MemberFixture extends Fixture implements DependentFixtureInterface
     public const REFERENCE_MEMBER_USER = 'test_work_member_user';
     public const REFERENCE_MEMBER_ADMIN = 'test_work_member_admin';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $group = (new GroupBuilder())
             ->withName('Our Clients')
