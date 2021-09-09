@@ -28,6 +28,6 @@ class DocsCommand extends Command
 
         $io->success('Done!');
 
-        return 1;
+        return 0;
     }
 }
