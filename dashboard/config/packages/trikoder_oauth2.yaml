@@ -13,6 +13,8 @@ trikoder_oauth2:
                 auth_code_ttl: PT10M
             client_credentials:
                 enable: true
+            implicit:
+                enable: true
             password:
                 enable: true
             refresh_token:
