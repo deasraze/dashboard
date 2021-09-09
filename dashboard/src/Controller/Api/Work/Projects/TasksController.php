@@ -157,10 +157,10 @@ class TasksController extends AbstractController
                             'name' => $action['actor_name'],
                         ],
                         'set' => [
-                            'project' => [
+                            'project' => $action['set_project_id'] ? [
                                 'id' => $action['set_project_id'],
                                 'name' => $action['set_project_name'],
-                            ],
+                            ] : null,
                             'name' => $action['set_name'],
                             'content' => $action['set_content'],
                             'file' => $action['set_file_id'],
