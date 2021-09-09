@@ -55,36 +55,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "nullable": true,
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "violations": {
-                                            "nullable": true,
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "propertyPath": {
-                                                        "type": "string"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ErrorModel"
                                 }
                             }
                         }
@@ -154,36 +125,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "nullable": true,
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "violations": {
-                                            "nullable": true,
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "propertyPath": {
-                                                        "type": "string"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ErrorModel"
                                 }
                             }
                         }
@@ -315,24 +257,7 @@
                                             }
                                         },
                                         "pagination": {
-                                            "properties": {
-                                                "count": {
-                                                    "type": "integer"
-                                                },
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "page": {
-                                                    "type": "integer"
-                                                },
-                                                "pages": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/Pagination"
                                         }
                                     },
                                     "type": "object"
@@ -509,24 +434,7 @@
                                             }
                                         },
                                         "pagination": {
-                                            "properties": {
-                                                "count": {
-                                                    "type": "integer"
-                                                },
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "page": {
-                                                    "type": "integer"
-                                                },
-                                                "pages": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/Pagination"
                                         }
                                     },
                                     "type": "object"
@@ -547,12 +455,12 @@
                 ]
             }
         },
-        "/work/tasks/{id}/plan": {
+        "/work/projects/tasks/{id}/plan": {
             "put": {
                 "tags": [
                     "Work Task"
                 ],
-                "operationId": "176ff2fc08484e810ce164c802b5312a",
+                "operationId": "37d61349c57662570d15e5eef0936d50",
                 "parameters": [
                     {
                         "name": "id",
@@ -590,36 +498,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "nullable": true,
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "violations": {
-                                            "nullable": true,
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "propertyPath": {
-                                                        "type": "string"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ErrorModel"
                                 }
                             }
                         }
@@ -640,7 +519,7 @@
                 "tags": [
                     "Work Task"
                 ],
-                "operationId": "6f33714714863fad0ea2ce8385ea1b6b",
+                "operationId": "654a77a3f9d834e2a86f6cea65ad707e",
                 "parameters": [
                     {
                         "name": "id",
@@ -661,21 +540,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "nullable": true,
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ErrorModel"
                                 }
                             }
                         }
@@ -693,12 +558,12 @@
                 ]
             }
         },
-        "/work/tasks/{id}": {
+        "/work/projects/tasks/{id}": {
             "get": {
                 "tags": [
                     "Work Task"
                 ],
-                "operationId": "056f60c3e4fad07818c6b0d3eabb0b51",
+                "operationId": "13c4e87785711135e81ba1834fffd3dd",
                 "parameters": [
                     {
                         "name": "id",
@@ -1019,6 +884,60 @@
         }
     },
     "components": {
+        "schemas": {
+            "ErrorModel": {
+                "properties": {
+                    "error": {
+                        "nullable": true,
+                        "properties": {
+                            "code": {
+                                "type": "integer"
+                            },
+                            "message": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "violations": {
+                        "nullable": true,
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "propertyPath": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Pagination": {
+                "properties": {
+                    "count": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "page": {
+                        "type": "integer"
+                    },
+                    "pages": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "oauth2": {
                 "type": "oauth2",
