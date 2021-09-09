@@ -112,7 +112,7 @@ class TasksController extends AbstractController
                 'avatar' => Gravatar::url($task->getAuthor()->getEmail()->getValue(), 100),
             ],
             'date' => $task->getDate()->format(DATE_ATOM),
-            'plan_date' => $task->getPlanDate() ? $task->getPlanDate()->format('Y-d-m') : null,
+            'plan_date' => $task->getPlanDate() ? $task->getPlanDate()->format('Y-m-d') : null,
             'start_date' => $task->getStartDate() ? $task->getStartDate()->format(DATE_ATOM) : null,
             'end_date' => $task->getEndDate() ? $task->getEndDate()->format(DATE_ATOM) : null,
             'name' => $task->getName(),
