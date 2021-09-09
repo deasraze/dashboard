@@ -10,7 +10,7 @@ class HomeTest extends DbWebTestCase
 {
     public function testSuccess(): void
     {
-        $this->client->request('GET', '/api');
+        $this->client->request('GET', '/api/');
 
         $this->assertResponseIsSuccessful();
         self::assertJson($content = $this->client->getResponse()->getContent());
@@ -24,7 +24,7 @@ class HomeTest extends DbWebTestCase
 
     public function testPost(): void
     {
-        $this->client->request('POST', '/api');
+        $this->client->request('POST', '/api/');
 
         $this->assertResponseStatusCodeSame(405);
     }
