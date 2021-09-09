@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Work\Projects;
 
+use App\Controller\Api\PaginationNormalizer;
 use App\Model\Work\Entity\Members\Member\Member;
 use App\Model\Work\Entity\Projects\Task\File\File;
 use App\Model\Work\Entity\Projects\Task\Task;
@@ -93,6 +94,7 @@ class TasksController extends AbstractController
                         'name' => $member['name'],
                 ], $item['executors']),
             ], (array) $pagination->getItems()),
+            'pagination' => PaginationNormalizer::normalize($pagination),
         ]);
     }
 
