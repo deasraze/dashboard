@@ -3,7 +3,9 @@ down: docker-down
 restart: docker-down docker-up dashboard-profiles-up
 init: docker-down-clear docker-pull docker-build docker-up dashboard-init
 test: dashboard-test
+test-coverage: dashboard-test-coverage
 test-unit: dashboard-test-unit
+test-unit-coverage: dashboard-test-unit-coverage
 test-init: dashboard-test-db-init dashboard-test
 
 docker-up:
@@ -56,8 +58,14 @@ dashboard-test-db-init: dashboard-test-drop-db dashboard-test-db dashboard-test-
 dashboard-test:
 	docker-compose run --rm php-cli php bin/phpunit
 
+dashboard-test-coverage:
+	docker-compose  run --rm php-cli composer test-coverage -- --coverage-clover var/test/clover.xml
+
 dashboard-test-unit:
 	docker-compose run --rm php-cli php bin/phpunit --testsuite=unit
+
+dashboard-test-unit-coverage:
+	docker-compose run --rm php-cli composer test-coverage -- --testsuite=unit --coverage-clover var/test/clover.xml
 
 dashboard-test-drop-db:
 	docker-compose run --rm php-cli php bin/console --env=test doctrine:database:drop --if-exists --force --no-interaction

@@ -108,7 +108,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "test-coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-html var/test/coverage"
     },
     "conflict": {
         "symfony/symfony": "*"
