@@ -21,6 +21,11 @@ class Group
      * @ORM\Column(type="string")
      */
     private string $name;
+    /**
+     * @ORM\Version()
+     * @ORM\Column(type="integer")
+     */
+    private int $version;
 
     public function __construct(Id $id, string $name)
     {

@@ -27,6 +27,11 @@ class Role
      * @ORM\Column(type="work_projects_role_permissions")
      */
     private $permissions;
+    /**
+     * @ORM\Version()
+     * @ORM\Column(type="integer")
+     */
+    private int $version;
 
     public function __construct(Id $id, string $name, array $permissions)
     {

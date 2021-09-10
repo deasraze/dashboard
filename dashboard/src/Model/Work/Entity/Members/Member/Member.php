@@ -35,6 +35,11 @@ class Member
      * @ORM\Column(type="work_members_member_status", length=16)
      */
     private Status $status;
+    /**
+     * @ORM\Version()
+     * @ORM\Column(type="integer")
+     */
+    private int $version;
 
     public function __construct(Id $id, Group $group, Name $name, Email $email)
     {
